@@ -29,7 +29,20 @@
 		67DC1E7B16F8A28100D73D1E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67DC1E4816F8A27700D73D1E /* Foundation.framework */; };
 		67DC1E8316F8A28200D73D1E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 67DC1E8116F8A28200D73D1E /* InfoPlist.strings */; };
 		67DC1E8616F8A28300D73D1E /* LiveReport2013Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 67DC1E8516F8A28300D73D1E /* LiveReport2013Tests.m */; };
-		67DC1E9016F8BD8C00D73D1E /* livereport2013.db in Resources */ = {isa = PBXBuildFile; fileRef = 67DC1E8F16F8BD8C00D73D1E /* livereport2013.db */; };
+		67DC1E9216F8C04600D73D1E /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 67DC1E9116F8C04600D73D1E /* libsqlite3.0.dylib */; };
+		67DC1E9416F8C32F00D73D1E /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67DC1E9316F8C32F00D73D1E /* FacebookSDK.framework */; };
+		67DC1E9516F8C33700D73D1E /* livereport2013.db in Resources */ = {isa = PBXBuildFile; fileRef = 67DC1E8F16F8BD8C00D73D1E /* livereport2013.db */; };
+		67DC1E9716F8C35C00D73D1E /* FacebookSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 67DC1E9616F8C35C00D73D1E /* FacebookSDKResources.bundle */; };
+		67DC1EA316F8C4F400D73D1E /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 67DC1E9A16F8C4F400D73D1E /* FMDatabase.m */; };
+		67DC1EA416F8C4F400D73D1E /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 67DC1E9A16F8C4F400D73D1E /* FMDatabase.m */; };
+		67DC1EA516F8C4F400D73D1E /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 67DC1E9C16F8C4F400D73D1E /* FMDatabaseAdditions.m */; };
+		67DC1EA616F8C4F400D73D1E /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 67DC1E9C16F8C4F400D73D1E /* FMDatabaseAdditions.m */; };
+		67DC1EA716F8C4F400D73D1E /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 67DC1E9E16F8C4F400D73D1E /* FMDatabasePool.m */; };
+		67DC1EA816F8C4F400D73D1E /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 67DC1E9E16F8C4F400D73D1E /* FMDatabasePool.m */; };
+		67DC1EA916F8C4F400D73D1E /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 67DC1EA016F8C4F400D73D1E /* FMDatabaseQueue.m */; };
+		67DC1EAA16F8C4F400D73D1E /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 67DC1EA016F8C4F400D73D1E /* FMDatabaseQueue.m */; };
+		67DC1EAB16F8C4F400D73D1E /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 67DC1EA216F8C4F400D73D1E /* FMResultSet.m */; };
+		67DC1EAC16F8C4F400D73D1E /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 67DC1EA216F8C4F400D73D1E /* FMResultSet.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +86,19 @@
 		67DC1E8416F8A28200D73D1E /* LiveReport2013Tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveReport2013Tests.h; sourceTree = "<group>"; };
 		67DC1E8516F8A28300D73D1E /* LiveReport2013Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveReport2013Tests.m; sourceTree = "<group>"; };
 		67DC1E8F16F8BD8C00D73D1E /* livereport2013.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = livereport2013.db; sourceTree = "<group>"; };
+		67DC1E9116F8C04600D73D1E /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		67DC1E9316F8C32F00D73D1E /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../../Documents/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
+		67DC1E9616F8C35C00D73D1E /* FacebookSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = FacebookSDKResources.bundle; path = ../../../Documents/FacebookSDK/FacebookSDK.framework/Versions/A/Resources/FacebookSDKResources.bundle; sourceTree = "<group>"; };
+		67DC1E9916F8C4F400D73D1E /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
+		67DC1E9A16F8C4F400D73D1E /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
+		67DC1E9B16F8C4F400D73D1E /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		67DC1E9C16F8C4F400D73D1E /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		67DC1E9D16F8C4F400D73D1E /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
+		67DC1E9E16F8C4F400D73D1E /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
+		67DC1E9F16F8C4F400D73D1E /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
+		67DC1EA016F8C4F400D73D1E /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
+		67DC1EA116F8C4F400D73D1E /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
+		67DC1EA216F8C4F400D73D1E /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,9 +106,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67DC1E9216F8C04600D73D1E /* libsqlite3.0.dylib in Frameworks */,
 				67DC1E4716F8A27700D73D1E /* UIKit.framework in Frameworks */,
 				67DC1E4916F8A27800D73D1E /* Foundation.framework in Frameworks */,
 				67DC1E4B16F8A27800D73D1E /* CoreGraphics.framework in Frameworks */,
+				67DC1E9416F8C32F00D73D1E /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +130,7 @@
 		67DC1E3A16F8A27500D73D1E = {
 			isa = PBXGroup;
 			children = (
+				67DC1E9816F8C4E300D73D1E /* FMDB */,
 				67DC1E4C16F8A27800D73D1E /* LiveReport2013 */,
 				67DC1E7E16F8A28100D73D1E /* LiveReport2013Tests */,
 				67DC1E4516F8A27700D73D1E /* Frameworks */,
@@ -121,6 +150,9 @@
 		67DC1E4516F8A27700D73D1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				67DC1E9616F8C35C00D73D1E /* FacebookSDKResources.bundle */,
+				67DC1E9316F8C32F00D73D1E /* FacebookSDK.framework */,
+				67DC1E9116F8C04600D73D1E /* libsqlite3.0.dylib */,
 				67DC1E4616F8A27700D73D1E /* UIKit.framework */,
 				67DC1E4816F8A27700D73D1E /* Foundation.framework */,
 				67DC1E4A16F8A27800D73D1E /* CoreGraphics.framework */,
@@ -181,6 +213,23 @@
 				67DC1E8116F8A28200D73D1E /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		67DC1E9816F8C4E300D73D1E /* FMDB */ = {
+			isa = PBXGroup;
+			children = (
+				67DC1E9916F8C4F400D73D1E /* FMDatabase.h */,
+				67DC1E9A16F8C4F400D73D1E /* FMDatabase.m */,
+				67DC1E9B16F8C4F400D73D1E /* FMDatabaseAdditions.h */,
+				67DC1E9C16F8C4F400D73D1E /* FMDatabaseAdditions.m */,
+				67DC1E9D16F8C4F400D73D1E /* FMDatabasePool.h */,
+				67DC1E9E16F8C4F400D73D1E /* FMDatabasePool.m */,
+				67DC1E9F16F8C4F400D73D1E /* FMDatabaseQueue.h */,
+				67DC1EA016F8C4F400D73D1E /* FMDatabaseQueue.m */,
+				67DC1EA116F8C4F400D73D1E /* FMResultSet.h */,
+				67DC1EA216F8C4F400D73D1E /* FMResultSet.m */,
+			);
+			name = FMDB;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -264,6 +313,8 @@
 				67DC1E6A16F8A27E00D73D1E /* first@2x.png in Resources */,
 				67DC1E6F16F8A28000D73D1E /* second.png in Resources */,
 				67DC1E7116F8A28000D73D1E /* second@2x.png in Resources */,
+				67DC1E9516F8C33700D73D1E /* livereport2013.db in Resources */,
+				67DC1E9716F8C35C00D73D1E /* FacebookSDKResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,7 +323,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				67DC1E8316F8A28200D73D1E /* InfoPlist.strings in Resources */,
-				67DC1E9016F8BD8C00D73D1E /* livereport2013.db in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +353,11 @@
 				67DC1E5716F8A27A00D73D1E /* AppDelegate.m in Sources */,
 				67DC1E6616F8A27D00D73D1E /* FirstViewController.m in Sources */,
 				67DC1E6D16F8A27F00D73D1E /* SecondViewController.m in Sources */,
+				67DC1EA316F8C4F400D73D1E /* FMDatabase.m in Sources */,
+				67DC1EA516F8C4F400D73D1E /* FMDatabaseAdditions.m in Sources */,
+				67DC1EA716F8C4F400D73D1E /* FMDatabasePool.m in Sources */,
+				67DC1EA916F8C4F400D73D1E /* FMDatabaseQueue.m in Sources */,
+				67DC1EAB16F8C4F400D73D1E /* FMResultSet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,6 +366,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				67DC1E8616F8A28300D73D1E /* LiveReport2013Tests.m in Sources */,
+				67DC1EA416F8C4F400D73D1E /* FMDatabase.m in Sources */,
+				67DC1EA616F8C4F400D73D1E /* FMDatabaseAdditions.m in Sources */,
+				67DC1EA816F8C4F400D73D1E /* FMDatabasePool.m in Sources */,
+				67DC1EAA16F8C4F400D73D1E /* FMDatabaseQueue.m in Sources */,
+				67DC1EAC16F8C4F400D73D1E /* FMResultSet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,9 +481,15 @@
 		67DC1E8A16F8A28300D73D1E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../Documents/FacebookSDK\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LiveReport2013/LiveReport2013-Prefix.pch";
 				INFOPLIST_FILE = "LiveReport2013/LiveReport2013-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = "-lsqlite3.0";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -432,9 +498,15 @@
 		67DC1E8B16F8A28300D73D1E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../Documents/FacebookSDK\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LiveReport2013/LiveReport2013-Prefix.pch";
 				INFOPLIST_FILE = "LiveReport2013/LiveReport2013-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = "-lsqlite3.0";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

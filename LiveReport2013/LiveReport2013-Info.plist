@@ -45,9 +45,9 @@
 				<key>Blue</key>
 				<real>1</real>
 				<key>Green</key>
-				<real>0.0</real>
+				<real>0</real>
 				<key>Red</key>
-				<real>0.0</real>
+				<real>0</real>
 			</dict>
 			<key>Translucent</key>
 			<false/>
@@ -58,6 +58,17 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>FacebookAppID</key>
+	<string>123720197815642</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb123720197815642</string>
+			</array>
+		</dict>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
