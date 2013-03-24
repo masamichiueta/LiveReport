@@ -31,7 +31,6 @@
 
 - (void) toggleImage
 {
-    NSLog(@"image toggled");
     selected = !selected;
     _imageView.image = (selected ? _selectedImage : _normalImage);
 }
