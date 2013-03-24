@@ -100,18 +100,25 @@
         [_db setShouldCacheStatements:YES];
         
         // SELECT
-        NSString *sql = @"SELECT * FROM songs WHERE artist = ?";
+        NSString *sql = @"SELECT DISTINCT album FROM songs WHERE artist = ?";
         FMResultSet *rs = [_db executeQuery:sql, artist];
         
         while ([rs next]) {
-            NSMutableDictionary *song = [NSMutableDictionary dictionary];
-            [song setObject:[rs stringForColumn:@"id"] forKey:@"id"];
-            [song setObject:[rs stringForColumn:@"name"] forKey:@"name"];
-            [song setObject:[rs stringForColumn:@"album"] forKey:@"album"];
-            [song setObject:[rs stringForColumn:@"artist"] forKey:@"artist"];
-            [song setObject:[rs stringForColumn:@"itunes"] forKey:@"itunes"];
+            NSMutableArray *album_song = [NSMutableArray array];
+            NSString *sql_album = @"SELECT * FROM songs WHERE artist = ? AND album = ?";
+            FMResultSet *rs_album = [_db executeQuery:sql_album, artist,[rs stringForColumn:@"album"]];
             
-            [songList addObject:song];
+            while([rs_album next]){
+                NSMutableDictionary *song = [NSMutableDictionary dictionary];
+                [song setObject:[rs_album stringForColumn:@"id"] forKey:@"id"];
+                [song setObject:[rs_album stringForColumn:@"name"] forKey:@"name"];
+                [song setObject:[rs_album stringForColumn:@"album"] forKey:@"album"];
+                [song setObject:[rs_album stringForColumn:@"artist"] forKey:@"artist"];
+                [song setObject:[rs_album stringForColumn:@"itunes"] forKey:@"itunes"];
+                [album_song addObject:song];
+            }
+            
+            [songList addObject:album_song];
             
         }
         [rs close];

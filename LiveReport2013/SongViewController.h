@@ -9,23 +9,25 @@
 #import <UIKit/UIKit.h>
 #import "LiveReportDAO.h"
 
-@interface SongViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>{
+@interface SongViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>{
     
     NSMutableArray *songList_SF;
     NSMutableArray *songList_19;
     NSMutableArray *songList_3B;
     NSMutableArray *songList_OK;
-    
-    NSMutableArray *rowNumList_SF;
-    NSMutableArray *rowNumList_19;
-    NSMutableArray *rowNumList_3B;
-    NSMutableArray *rowNumList_OK;
 
 }
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) IBOutlet UIPageControl *pageControl;
 
-@property (strong, nonatomic) IBOutlet UITableView *songListTable;
+@property (strong, nonatomic) IBOutlet UITableView *songListTable_OK;
+@property (strong, nonatomic) IBOutlet UITableView *songListTable_3B;
+@property (strong, nonatomic) IBOutlet UITableView *songListTable_19;
+@property (strong, nonatomic) IBOutlet UITableView *songListTable_SF;
 @property (strong, nonatomic) LiveReportDAO *liveReportObj;
+;
+@property (strong, nonatomic) IBOutlet UISegmentedControl *artistSelectionSegmentedController;
+- (IBAction)selectView:(id)sender;
 
--(NSMutableArray *) getSectionRowNumList:(NSMutableArray *)songList;
 
 @end

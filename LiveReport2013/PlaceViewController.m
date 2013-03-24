@@ -117,7 +117,7 @@
     cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
     cell.borderColor = [UIColor colorWithHex:0xCC3599];
     [cell prepareForTableView:tableView indexPath:indexPath];
-    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    cell.accessoryType = UITableViewCellAccessoryNone;
     
     cell.textLabel.text = [[placeList objectAtIndex:indexPath.row] objectForKey:@"name"];
     cell.detailTextLabel.text = [[placeList objectAtIndex:indexPath.row] objectForKey:@"date"];
