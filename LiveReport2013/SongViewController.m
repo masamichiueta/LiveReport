@@ -8,6 +8,9 @@
 
 #import "SongViewController.h"
 
+#import "ToggleImageControl.h"
+#import "ImageUtil.h"
+
 #import "PrettyKit.h"
 
 @interface SongViewController ()
@@ -223,28 +226,41 @@
     cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
     cell.borderColor = [UIColor colorWithHex:0xCC3599];
     [cell prepareForTableView:tableView indexPath:indexPath];
-    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    cell.detailTextLabel.textAlignment = NSTextAlignmentRight;
     
+    //Cell Accessory 
+    UIButton *myAccessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
+    [myAccessoryButton setBackgroundColor:[UIColor clearColor]];
+    [myAccessoryButton setImage:[UIImage imageNamed:@"custom_accessory"] forState:UIControlStateNormal];
+    [myAccessoryButton setImage:[UIImage imageNamed:@"custom_accessory_touched"] forState:UIControlStateHighlighted];
+    [myAccessoryButton addTarget:self action:@selector(myAccessoryTouched:event:)forControlEvents:UIControlEventTouchUpInside];
+    [cell setAccessoryView:myAccessoryButton];
+    
+    
+    //Cell Content
     switch (tableView.tag) {
         case 0:
             cell.textLabel.text = [[[songList_OK objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
-            cell.detailTextLabel.textAlignment = NSTextAlignmentRight;
             break;
         case 1:
             cell.textLabel.text = [[[songList_3B objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
-            cell.detailTextLabel.textAlignment = NSTextAlignmentRight;
             break;
         case 2:
             cell.textLabel.text = [[[songList_19 objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
-            cell.detailTextLabel.textAlignment = NSTextAlignmentRight;
             break;
         case 3:
             cell.textLabel.text = [[[songList_SF objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
-            cell.detailTextLabel.textAlignment = NSTextAlignmentRight;
             break;
         default:
             break;
     }
+    
+    
+    //Check Mark
+    cell.imageView.image = [ImageUtil imageWithColor:[UIColor clearColor]];
+    ToggleImageControl *toggleControl = [[ToggleImageControl alloc] initWithFrame: CGRectMake(12,16,24,24)];
+    toggleControl.tag = indexPath.row;  // for reference in notifications.
+    [cell.contentView addSubview: toggleControl];
     
     return cell;
     
@@ -268,6 +284,54 @@
             break;
     }
 }
+
+-(void)myAccessoryTouched:(id)sender event:(id)event{
+    NSLog(@"tapped");
+    NSSet *touches = [event allTouches];
+	UITouch *touch = [touches anyObject];
+    switch (_pageControl.currentPage) {
+        case 0:{
+            CGPoint currentTouchPosition = [touch locationInView:_songListTable_OK];
+            NSIndexPath *indexPath = [_songListTable_OK indexPathForRowAtPoint: currentTouchPosition];
+            if (indexPath != nil){
+                [self tableView: _songListTable_OK accessoryButtonTappedForRowWithIndexPath: indexPath];
+            }
+        }
+            break;
+        case 1:{
+            CGPoint currentTouchPosition = [touch locationInView:_songListTable_3B];
+            NSIndexPath *indexPath = [_songListTable_3B indexPathForRowAtPoint: currentTouchPosition];
+            if (indexPath != nil){
+                [self tableView: _songListTable_3B accessoryButtonTappedForRowWithIndexPath: indexPath];
+            }
+           
+        }
+            break;
+        case 2:{
+            CGPoint currentTouchPosition = [touch locationInView:_songListTable_19];
+            NSIndexPath *indexPath = [_songListTable_19 indexPathForRowAtPoint: currentTouchPosition];
+            if (indexPath != nil){
+                [self tableView: _songListTable_19 accessoryButtonTappedForRowWithIndexPath: indexPath];
+            }
+        }
+            break;
+        case 3:{
+            CGPoint currentTouchPosition = [touch locationInView:_songListTable_SF];
+            NSIndexPath *indexPath = [_songListTable_SF indexPathForRowAtPoint: currentTouchPosition];
+            if (indexPath != nil){
+                [self tableView: _songListTable_SF accessoryButtonTappedForRowWithIndexPath: indexPath];
+            }
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+-(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
+    NSLog(@"touched tableviewtag = %d,  section = %d, row = %d",tableView.tag, indexPath.section, indexPath.row);
+}
+
 
 
 

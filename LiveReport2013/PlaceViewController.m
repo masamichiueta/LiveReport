@@ -8,6 +8,8 @@
 
 #import "PlaceViewController.h"
 
+#import "ToggleImageControl.h"
+#import "ImageUtil.h"
 
 #import "PrettyKit.h"
 
@@ -117,11 +119,29 @@
     cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
     cell.borderColor = [UIColor colorWithHex:0xCC3599];
     [cell prepareForTableView:tableView indexPath:indexPath];
-    cell.accessoryType = UITableViewCellAccessoryNone;
     
+    
+    //Accessory Button
+    UIButton *myAccessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
+    [myAccessoryButton setBackgroundColor:[UIColor clearColor]];
+    [myAccessoryButton setImage:[UIImage imageNamed:@"custom_accessory"] forState:UIControlStateNormal];
+    [myAccessoryButton setImage:[UIImage imageNamed:@"custom_accessory_touched"] forState:UIControlStateHighlighted];
+    [myAccessoryButton addTarget:self action:@selector(myAccessoryTouched:event:)forControlEvents:UIControlEventTouchUpInside];
+    [cell setAccessoryView:myAccessoryButton];
+    
+    
+    //Cell Content
     cell.textLabel.text = [[placeList objectAtIndex:indexPath.row] objectForKey:@"name"];
     cell.detailTextLabel.text = [[placeList objectAtIndex:indexPath.row] objectForKey:@"date"];
     cell.detailTextLabel.textAlignment = NSTextAlignmentRight;
+        
+    
+    //Check Mark
+    cell.imageView.image = [ImageUtil imageWithColor:[UIColor clearColor]];
+    ToggleImageControl *toggleControl = [[ToggleImageControl alloc] initWithFrame: CGRectMake(12,16,24,24)];
+    toggleControl.tag = indexPath.row;  // for reference in notifications.
+    [cell.contentView addSubview: toggleControl];
+    
     
     return cell;
     
@@ -131,6 +151,24 @@
     
     [_placeListTable deselectRowAtIndexPath:[_placeListTable indexPathForSelectedRow] animated:NO];
 }
+
+
+-(void)myAccessoryTouched:(id)sender event:(id)event{
+    NSSet *touches = [event allTouches];
+	UITouch *touch = [touches anyObject];
+	CGPoint currentTouchPosition = [touch locationInView:_placeListTable];
+	NSIndexPath *indexPath = [_placeListTable indexPathForRowAtPoint: currentTouchPosition];
+	if (indexPath != nil){
+        [self tableView: _placeListTable accessoryButtonTappedForRowWithIndexPath: indexPath];
+	}
+    
+}
+
+-(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
+    NSLog(@"touched section = %d, row = %d", indexPath.section, indexPath.row);
+}
+
+
 
 
 @end

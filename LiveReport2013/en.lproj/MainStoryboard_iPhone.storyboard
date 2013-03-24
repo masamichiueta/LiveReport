@@ -12,7 +12,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Ne2-nT-BwU">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Ne2-nT-BwU">
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="s2z-sl-y2f">
@@ -62,7 +62,7 @@
                                         </constraints>
                                         <prototypes>
                                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="ASJ-9R-8Ph">
-                                                <rect key="frame" x="0.0" y="46" width="320" height="45"/>
+                                                <rect key="frame" x="0.0" y="46" width="320" height="46"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                     <rect key="frame" x="10" y="1" width="300" height="43"/>
@@ -79,7 +79,7 @@
                                         </constraints>
                                         <prototypes>
                                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="YhX-zp-mB1">
-                                                <rect key="frame" x="0.0" y="46" width="320" height="45"/>
+                                                <rect key="frame" x="0.0" y="46" width="320" height="46"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                     <rect key="frame" x="10" y="1" width="300" height="43"/>
@@ -96,7 +96,7 @@
                                         </constraints>
                                         <prototypes>
                                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="epg-dS-ztf">
-                                                <rect key="frame" x="0.0" y="46" width="320" height="45"/>
+                                                <rect key="frame" x="0.0" y="46" width="320" height="46"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                     <rect key="frame" x="10" y="1" width="300" height="43"/>
@@ -113,7 +113,7 @@
                                         </constraints>
                                         <prototypes>
                                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="f1f-uw-PUH">
-                                                <rect key="frame" x="0.0" y="46" width="320" height="45"/>
+                                                <rect key="frame" x="0.0" y="46" width="320" height="46"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                     <rect key="frame" x="10" y="1" width="300" height="43"/>
@@ -377,36 +377,6 @@
             <point key="canvasLocation" x="675" y="-406"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-        <class className="PlaceViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PlaceViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="placeListTable" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="PrettyNavigationBar" superclassName="UINavigationBar">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PrettyNavigationBar.h"/>
-        </class>
-        <class className="PrettyTabBar" superclassName="UITabBar">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PrettyTabBar.h"/>
-        </class>
-        <class className="SongViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SongViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="selectView:"/>
-                <relationship kind="outlet" name="artistSelectionSegmentedController" candidateClass="UISegmentedControl"/>
-                <relationship kind="outlet" name="pageControl" candidateClass="UIPageControl"/>
-                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
-                <relationship kind="outlet" name="songListTable_19" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="songListTable_3B" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="songListTable_OK" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="songListTable_SF" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
