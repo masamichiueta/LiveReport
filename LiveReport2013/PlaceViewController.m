@@ -8,7 +8,7 @@
 
 #import "PlaceViewController.h"
 
-#import "ToggleImageControl.h"
+#import "PlaceToggleControl.h"
 #import "ImageUtil.h"
 
 #import "PrettyKit.h"
@@ -46,6 +46,28 @@
     
 }
 
+#pragma mark -
+#pragma mark Initialization
+- (void) initTableView{
+    _placeListTable.delegate = self;
+    _placeListTable.dataSource = self;
+    
+    [_placeListTable dropShadows];
+    _placeListTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
+}
+
+-(void) initToggleControl{
+    toggleControlList = [NSMutableArray array];
+    for(int i=0;i<[placeList count];i++){
+        PlaceToggleControl *toggleControl = [[PlaceToggleControl alloc] initWithFrame: CGRectMake(12,16,24,24)];
+        toggleControl.tag = i;
+        [toggleControlList addObject:toggleControl];
+    }
+
+    //Register NC in PlaceToggleControl
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self selector:@selector(placeTogglePushed:) name:@"PlaceTogglePushed" object:nil];
+}
 
 #pragma mark -
 #pragma mark View Life Cycle
@@ -55,17 +77,14 @@
 	// Do any additional setup after loading the view.
     
     [self customizeNavBar];
-    
-    _placeListTable.delegate = self;
-    _placeListTable.dataSource = self;
-    
-    [_placeListTable dropShadows];
-    _placeListTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
+    [self initTableView];
     
     _liveReportObj = [[LiveReportDAO alloc] init];
     placeList = [NSMutableArray array];
     placeList = _liveReportObj.getPlaceList;
+    
         
+    [self initToggleControl];
 }
 
 - (void)didReceiveMemoryWarning
@@ -138,18 +157,11 @@
     
     //Check Mark
     cell.imageView.image = [ImageUtil imageWithColor:[UIColor clearColor]];
-    ToggleImageControl *toggleControl = [[ToggleImageControl alloc] initWithFrame: CGRectMake(12,16,24,24)];
-    toggleControl.tag = indexPath.row;  // for reference in notifications.
-    [cell.contentView addSubview: toggleControl];
+    [cell.contentView addSubview: [toggleControlList objectAtIndex:indexPath.row]];
     
     
     return cell;
     
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    [_placeListTable deselectRowAtIndexPath:[_placeListTable indexPathForSelectedRow] animated:NO];
 }
 
 
@@ -168,6 +180,12 @@
     NSLog(@"touched section = %d, row = %d", indexPath.section, indexPath.row);
 }
 
+//Called when place toggle is pushed
+-(void)placeTogglePushed:(NSNotification*) notification{
+
+    NSString *place = [[notification userInfo] objectForKey:@"Place"];
+    NSLog(@"in table view place = %@", place);
+}
 
 
 

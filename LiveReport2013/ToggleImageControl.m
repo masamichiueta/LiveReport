@@ -23,14 +23,13 @@
         _selectedImage = [UIImage imageNamed: @"selected.png"];
         _imageView = [[UIImageView alloc] initWithImage: _normalImage];
         [self addSubview:_imageView];
-        [self addTarget: self action: @selector(toggleImage) forControlEvents: UIControlEventTouchDown];
+        
         
     }
     return self;
 }
 
-- (void) toggleImage
-{
+- (void) togglePushed{
     selected = !selected;
     _imageView.image = (selected ? _selectedImage : _normalImage);
 }

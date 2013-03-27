@@ -34,6 +34,9 @@
 		6703137C16FF08E60023462C /* custom_accessory@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6703137A16FF08E60023462C /* custom_accessory@2x.png */; };
 		6703137F16FF0AF10023462C /* custom_accessory_touched.png in Resources */ = {isa = PBXBuildFile; fileRef = 6703137D16FF0AF10023462C /* custom_accessory_touched.png */; };
 		6703138016FF0AF10023462C /* custom_accessory_touched@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6703137E16FF0AF10023462C /* custom_accessory_touched@2x.png */; };
+		6703138316FF22550023462C /* PostInfoUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 6703138216FF22550023462C /* PostInfoUtil.m */; };
+		6703138616FF47FF0023462C /* PlaceToggleControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 6703138516FF47FF0023462C /* PlaceToggleControl.m */; };
+		6703138916FF48AA0023462C /* SongToggleControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 6703138816FF48AA0023462C /* SongToggleControl.m */; };
 		679044B716F9CDFC002D29FA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 679044B616F9CDFC002D29FA /* QuartzCore.framework */; };
 		679044C216F9F542002D29FA /* PlaceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 679044C116F9F541002D29FA /* PlaceViewController.m */; };
 		679044C516F9F592002D29FA /* SongViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 679044C416F9F592002D29FA /* SongViewController.m */; };
@@ -115,6 +118,12 @@
 		6703137A16FF08E60023462C /* custom_accessory@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "custom_accessory@2x.png"; sourceTree = "<group>"; };
 		6703137D16FF0AF10023462C /* custom_accessory_touched.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = custom_accessory_touched.png; sourceTree = "<group>"; };
 		6703137E16FF0AF10023462C /* custom_accessory_touched@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "custom_accessory_touched@2x.png"; sourceTree = "<group>"; };
+		6703138116FF22550023462C /* PostInfoUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostInfoUtil.h; sourceTree = "<group>"; };
+		6703138216FF22550023462C /* PostInfoUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostInfoUtil.m; sourceTree = "<group>"; };
+		6703138416FF47FF0023462C /* PlaceToggleControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceToggleControl.h; sourceTree = "<group>"; };
+		6703138516FF47FF0023462C /* PlaceToggleControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceToggleControl.m; sourceTree = "<group>"; };
+		6703138716FF48AA0023462C /* SongToggleControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongToggleControl.h; sourceTree = "<group>"; };
+		6703138816FF48AA0023462C /* SongToggleControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongToggleControl.m; sourceTree = "<group>"; };
 		679044B616F9CDFC002D29FA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		679044C016F9F541002D29FA /* PlaceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceViewController.h; sourceTree = "<group>"; };
 		679044C116F9F541002D29FA /* PlaceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceViewController.m; sourceTree = "<group>"; };
@@ -190,8 +199,7 @@
 			children = (
 				6703132416FA29E40023462C /* LiveReportDAO.h */,
 				6703132516FA29E40023462C /* LiveReportDAO.m */,
-				6703132A16FEEA900023462C /* ToggleImageControl.h */,
-				6703132B16FEEA900023462C /* ToggleImageControl.m */,
+				6703138A16FF48AE0023462C /* ToggleControl */,
 			);
 			name = Tool;
 			sourceTree = "<group>";
@@ -201,6 +209,8 @@
 			children = (
 				6703137616FF007F0023462C /* ImageUtil.h */,
 				6703137716FF007F0023462C /* ImageUtil.m */,
+				6703138116FF22550023462C /* PostInfoUtil.h */,
+				6703138216FF22550023462C /* PostInfoUtil.m */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -271,6 +281,19 @@
 				6703136C16FEF6390023462C /* FMResultSet.m */,
 			);
 			path = FMDB;
+			sourceTree = "<group>";
+		};
+		6703138A16FF48AE0023462C /* ToggleControl */ = {
+			isa = PBXGroup;
+			children = (
+				6703132A16FEEA900023462C /* ToggleImageControl.h */,
+				6703132B16FEEA900023462C /* ToggleImageControl.m */,
+				6703138416FF47FF0023462C /* PlaceToggleControl.h */,
+				6703138516FF47FF0023462C /* PlaceToggleControl.m */,
+				6703138716FF48AA0023462C /* SongToggleControl.h */,
+				6703138816FF48AA0023462C /* SongToggleControl.m */,
+			);
+			name = ToggleControl;
 			sourceTree = "<group>";
 		};
 		67DC1E3A16F8A27500D73D1E = {
@@ -503,6 +526,9 @@
 				6703137016FEF6390023462C /* FMDatabaseQueue.m in Sources */,
 				6703137116FEF6390023462C /* FMResultSet.m in Sources */,
 				6703137816FF007F0023462C /* ImageUtil.m in Sources */,
+				6703138316FF22550023462C /* PostInfoUtil.m in Sources */,
+				6703138616FF47FF0023462C /* PlaceToggleControl.m in Sources */,
+				6703138916FF48AA0023462C /* SongToggleControl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

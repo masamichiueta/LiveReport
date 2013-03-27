@@ -17,4 +17,5 @@
 @property(strong, nonatomic) UIImage *normalImage;
 @property(strong, nonatomic) UIImage *selectedImage;
 
+- (void) togglePushed;
 @end

@@ -8,7 +8,7 @@
 
 #import "SongViewController.h"
 
-#import "ToggleImageControl.h"
+#import "SongToggleControl.h"
 #import "ImageUtil.h"
 
 #import "PrettyKit.h"
@@ -20,13 +20,11 @@
 @implementation SongViewController
 @synthesize scrollView=_scrollView;
 @synthesize pageControl=_pageControl;
-@synthesize songListTable_OK=_songListTable_OK;
-@synthesize songListTable_3B=_songListTable_3B;
-@synthesize songListTable_19=_songListTable_19;
-@synthesize songListTable_SF=_songListTable_SF;
 @synthesize liveReportObj = _liveReportObj;
 @synthesize artistSelectionSegmentedController = _artistSelectionSegmentedController;
 
+
+#define ARTIST_NUM 4
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -35,6 +33,21 @@
         // Custom initialization
     }
     return self;
+}
+
+
+#pragma mark -
+#pragma mark Rotation
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)FromInterfaceOrientation {
+    _scrollView.contentOffset = CGPointMake(_scrollView.frame.size.width * _pageControl.currentPage, 0);
+    for(int i=0; i<[songTableList count]; i++){
+        UITableView *songTable = [songTableList objectAtIndex:i];
+        songTable.frame = CGRectMake(_scrollView.bounds.size.width*i, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
+    }
+     _scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width*ARTIST_NUM, _scrollView.frame.size.height);
+}
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return YES;
 }
 
 #pragma mark -
@@ -54,43 +67,66 @@
 
 #pragma mark -
 #pragma mark Initialization
-- (void) initTableView {
-    _songListTable_OK.delegate = self;
-    _songListTable_OK.dataSource = self;
-    _songListTable_3B.delegate = self;
-    _songListTable_3B.dataSource = self;
-    _songListTable_19.delegate = self;
-    _songListTable_19.dataSource = self;
-    _songListTable_SF.delegate = self;
-    _songListTable_SF.dataSource = self;
-    
-    _songListTable_OK.tag = 0;
-    _songListTable_3B.tag = 1;
-    _songListTable_19.tag = 2;
-    _songListTable_SF.tag = 3;
-    
-    
-    [_songListTable_OK dropShadows];
-    [_songListTable_3B dropShadows];
-    [_songListTable_19 dropShadows];
-    [_songListTable_SF dropShadows];
-    _songListTable_OK.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
-    _songListTable_3B.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
-    _songListTable_19.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
-    _songListTable_SF.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
-    
-}
 
 - (void) initSongList {
     _liveReportObj = [[LiveReportDAO alloc] init];
-    songList_SF = [NSMutableArray array];
-    songList_SF = [_liveReportObj getSongList:@"少年フレンド"];
-    songList_19 = [NSMutableArray array];
-    songList_19 = [_liveReportObj getSongList:@"19"];
-    songList_3B = [NSMutableArray array];
-    songList_3B = [_liveReportObj getSongList:@"3B LAB.☆S"];
-    songList_OK = [NSMutableArray array];
-    songList_OK = [_liveReportObj getSongList:@"岡平健治"];
+    
+    songList = [NSMutableArray array];
+    
+    NSMutableArray* songList_OK = [NSMutableArray arrayWithArray:[_liveReportObj getSongList:@"岡平健治"]];
+    NSMutableArray* songList_3B = [NSMutableArray arrayWithArray:[_liveReportObj getSongList:@"3B LAB.☆S"]];
+    NSMutableArray* songList_19 = [NSMutableArray arrayWithArray:[_liveReportObj getSongList:@"19"]];
+    NSMutableArray* songList_SF = [NSMutableArray arrayWithArray:[_liveReportObj getSongList:@"少年フレンド"]];
+    [songList addObject:songList_OK];
+    [songList addObject:songList_3B];
+    [songList addObject:songList_19];
+    [songList addObject:songList_SF];
+}
+
+-(void) initToggleControl{
+    toggleControlList = [NSMutableArray array];
+    
+    for(int i=0;i<[songList count];i++){
+        NSMutableArray* toggleControlList_section = [NSMutableArray array];
+        for(int j=0;j<[[songList objectAtIndex:i] count]; j++){
+            NSMutableArray* toggleControlList_row = [NSMutableArray array];
+            for(int k=0;k<[[[songList objectAtIndex:i] objectAtIndex:j] count]; k++){
+                SongToggleControl *toggleControl = [[SongToggleControl alloc] initWithFrame: CGRectMake(12,16,24,24)];
+                toggleControl.tag = i;
+                toggleControl.section = j;
+                toggleControl.row = k;
+                [toggleControlList_row addObject:toggleControl];
+            }
+            [toggleControlList_section addObject:toggleControlList_row];
+        }
+        [toggleControlList addObject:toggleControlList_section];
+    }
+    //Register NC in SongToggleControl
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self selector:@selector(songTogglePushed:) name:@"SongTogglePushed" object:nil];
+}
+
+- (void) initScrollView{
+    _scrollView.delegate = self;
+    _scrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
+    _scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width*ARTIST_NUM, _scrollView.frame.size.height);
+}
+
+
+- (void) initTableView {
+    
+    songTableList = [NSMutableArray array];
+    for(int i=0; i<ARTIST_NUM; i++){
+        UITableView *songTable = [[UITableView alloc] initWithFrame:CGRectMake(_scrollView.bounds.size.width*i, 0, _scrollView.frame.size.width, _scrollView.frame.size.height) style:UITableViewStyleGrouped];
+        songTable.delegate = self;
+        songTable.dataSource = self;
+        songTable.tag = i;
+        [songTable dropShadows];
+        songTable.backgroundView = nil;
+        songTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
+        [songTableList addObject:songTable];
+        [_scrollView addSubview:songTable];
+    }
 }
 
 
@@ -99,19 +135,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    
     [self customizeNavBar];
-    
-    _scrollView.delegate = self;
-    _scrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
-    
-    
-    [self initTableView];
     [self initSongList];
-    
+    [self initToggleControl];
 
 }
+
+//For AutoLayout of ScrollView ( viewDidLoad does not load scrollview)
+- (void) viewDidAppear:(BOOL)animated{
+    
+    [self initScrollView];
+    [self initTableView];
+
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -125,7 +162,7 @@
 - (void)scrollViewDidScroll:(UIScrollView *)sender {
     CGFloat pageWidth = _scrollView.frame.size.width;
     _pageControl.currentPage = floor((_scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-    
+
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView*)scrollView{
@@ -136,7 +173,7 @@
 #pragma mark UISegmentedController Methods
 - (IBAction)selectView:(id)sender {
     
-    CGPoint point = CGPointMake( 320*_artistSelectionSegmentedController.selectedSegmentIndex,0);
+    CGPoint point = CGPointMake( _scrollView.frame.size.width*_artistSelectionSegmentedController.selectedSegmentIndex,0);
     [_scrollView setContentOffset:point animated:YES];
     
 }
@@ -148,16 +185,16 @@
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     switch (tableView.tag) {
         case 0:
-            return [songList_OK count];
+            return [[songList objectAtIndex:0] count];
             break;
         case 1:
-            return [songList_3B count];
+            return [[songList objectAtIndex:1] count];
             break;
         case 2:
-            return [songList_19 count];
+            return [[songList objectAtIndex:2] count];
             break;
         case 3:
-            return [songList_SF count];
+            return [[songList objectAtIndex:3] count];
             break;
         default:
             break;
@@ -189,16 +226,16 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     switch (tableView.tag) {
         case 0:
-            return [[songList_OK objectAtIndex:section] count];
+            return [[[songList objectAtIndex:0] objectAtIndex:section] count];
             break;
         case 1:
-            return [[songList_3B objectAtIndex:section] count];
+            return [[[songList objectAtIndex:1] objectAtIndex:section] count];
             break;
         case 2:
-            return [[songList_19 objectAtIndex:section] count];
+            return [[[songList objectAtIndex:2] objectAtIndex:section] count];
             break;
         case 3:
-            return [[songList_SF objectAtIndex:section] count];
+            return [[[songList objectAtIndex:3] objectAtIndex:section] count];
             break;
         default:
             break;
@@ -240,16 +277,16 @@
     //Cell Content
     switch (tableView.tag) {
         case 0:
-            cell.textLabel.text = [[[songList_OK objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
+            cell.textLabel.text = [[[[songList objectAtIndex:0] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
             break;
         case 1:
-            cell.textLabel.text = [[[songList_3B objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
+            cell.textLabel.text = [[[[songList objectAtIndex:1] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
             break;
         case 2:
-            cell.textLabel.text = [[[songList_19 objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
+            cell.textLabel.text = [[[[songList objectAtIndex:2] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
             break;
         case 3:
-            cell.textLabel.text = [[[songList_SF objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
+            cell.textLabel.text = [[[[songList objectAtIndex:3] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
             break;
         default:
             break;
@@ -258,31 +295,10 @@
     
     //Check Mark
     cell.imageView.image = [ImageUtil imageWithColor:[UIColor clearColor]];
-    ToggleImageControl *toggleControl = [[ToggleImageControl alloc] initWithFrame: CGRectMake(12,16,24,24)];
-    toggleControl.tag = indexPath.row;  // for reference in notifications.
-    [cell.contentView addSubview: toggleControl];
+    [cell.contentView addSubview:[[[toggleControlList objectAtIndex:tableView.tag] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
     
     return cell;
     
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    switch (tableView.tag) {
-        case 0:
-            [_songListTable_OK deselectRowAtIndexPath:[_songListTable_OK indexPathForSelectedRow] animated:NO];
-            break;
-        case 1:
-            [_songListTable_OK deselectRowAtIndexPath:[_songListTable_OK indexPathForSelectedRow] animated:NO];
-            break;
-        case 2:
-            [_songListTable_OK deselectRowAtIndexPath:[_songListTable_OK indexPathForSelectedRow] animated:NO];
-            break;
-        case 3:
-            [_songListTable_OK deselectRowAtIndexPath:[_songListTable_OK indexPathForSelectedRow] animated:NO];
-            break;
-        default:
-            break;
-    }
 }
 
 -(void)myAccessoryTouched:(id)sender event:(id)event{
@@ -291,35 +307,35 @@
 	UITouch *touch = [touches anyObject];
     switch (_pageControl.currentPage) {
         case 0:{
-            CGPoint currentTouchPosition = [touch locationInView:_songListTable_OK];
-            NSIndexPath *indexPath = [_songListTable_OK indexPathForRowAtPoint: currentTouchPosition];
+            CGPoint currentTouchPosition = [touch locationInView:[songTableList objectAtIndex:0]];
+            NSIndexPath *indexPath = [[songTableList objectAtIndex:0] indexPathForRowAtPoint: currentTouchPosition];
             if (indexPath != nil){
-                [self tableView: _songListTable_OK accessoryButtonTappedForRowWithIndexPath: indexPath];
+                [self tableView: [songTableList objectAtIndex:0] accessoryButtonTappedForRowWithIndexPath: indexPath];
             }
         }
             break;
         case 1:{
-            CGPoint currentTouchPosition = [touch locationInView:_songListTable_3B];
-            NSIndexPath *indexPath = [_songListTable_3B indexPathForRowAtPoint: currentTouchPosition];
+            CGPoint currentTouchPosition = [touch locationInView:[songTableList objectAtIndex:1]];
+            NSIndexPath *indexPath = [[songTableList objectAtIndex:1] indexPathForRowAtPoint: currentTouchPosition];
             if (indexPath != nil){
-                [self tableView: _songListTable_3B accessoryButtonTappedForRowWithIndexPath: indexPath];
+                [self tableView: [songTableList objectAtIndex:1] accessoryButtonTappedForRowWithIndexPath: indexPath];
             }
            
         }
             break;
         case 2:{
-            CGPoint currentTouchPosition = [touch locationInView:_songListTable_19];
-            NSIndexPath *indexPath = [_songListTable_19 indexPathForRowAtPoint: currentTouchPosition];
+            CGPoint currentTouchPosition = [touch locationInView:[songTableList objectAtIndex:2]];
+            NSIndexPath *indexPath = [[songTableList objectAtIndex:2] indexPathForRowAtPoint: currentTouchPosition];
             if (indexPath != nil){
-                [self tableView: _songListTable_19 accessoryButtonTappedForRowWithIndexPath: indexPath];
+                [self tableView: [songTableList objectAtIndex:2] accessoryButtonTappedForRowWithIndexPath: indexPath];
             }
         }
             break;
         case 3:{
-            CGPoint currentTouchPosition = [touch locationInView:_songListTable_SF];
-            NSIndexPath *indexPath = [_songListTable_SF indexPathForRowAtPoint: currentTouchPosition];
+            CGPoint currentTouchPosition = [touch locationInView:[songTableList objectAtIndex:3]];
+            NSIndexPath *indexPath = [[songTableList objectAtIndex:3] indexPathForRowAtPoint: currentTouchPosition];
             if (indexPath != nil){
-                [self tableView: _songListTable_SF accessoryButtonTappedForRowWithIndexPath: indexPath];
+                [self tableView: [songTableList objectAtIndex:3] accessoryButtonTappedForRowWithIndexPath: indexPath];
             }
         }
             break;
@@ -331,6 +347,15 @@
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"touched tableviewtag = %d,  section = %d, row = %d",tableView.tag, indexPath.section, indexPath.row);
 }
+
+//Called when song toggle is pushed
+-(void)songTogglePushed:(NSNotification*) notification{
+    
+    NSDictionary *songDic = [[notification userInfo] objectForKey:@"Song"];
+    NSLog(@"in table view song = %@", [songDic description]);
+    
+}
+
 
 
 

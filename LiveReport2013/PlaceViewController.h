@@ -12,6 +12,7 @@
 @interface PlaceViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>{
     
     NSMutableArray *placeList;
+    NSMutableArray *toggleControlList;
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *placeListTable;

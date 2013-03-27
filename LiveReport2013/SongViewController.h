@@ -11,19 +11,14 @@
 
 @interface SongViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>{
     
-    NSMutableArray *songList_SF;
-    NSMutableArray *songList_19;
-    NSMutableArray *songList_3B;
-    NSMutableArray *songList_OK;
+    NSMutableArray *songList;
+    NSMutableArray *songTableList;
+    NSMutableArray *toggleControlList;
+    
 
 }
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UIPageControl *pageControl;
-
-@property (strong, nonatomic) IBOutlet UITableView *songListTable_OK;
-@property (strong, nonatomic) IBOutlet UITableView *songListTable_3B;
-@property (strong, nonatomic) IBOutlet UITableView *songListTable_19;
-@property (strong, nonatomic) IBOutlet UITableView *songListTable_SF;
 @property (strong, nonatomic) LiveReportDAO *liveReportObj;
 ;
 @property (strong, nonatomic) IBOutlet UISegmentedControl *artistSelectionSegmentedController;

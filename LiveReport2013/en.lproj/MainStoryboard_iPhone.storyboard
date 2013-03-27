@@ -50,118 +50,32 @@
             <objects>
                 <viewController title="SongViewController" id="3" customClass="SongViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="17">
-                        <rect key="frame" x="0.0" y="64" width="1280" height="455"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i64-eT-SIN">
-                                <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="spb-t9-Nvy" userLabel="SongTable_OK">
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="320" id="7dk-Em-oiL"/>
-                                        </constraints>
-                                        <prototypes>
-                                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="ASJ-9R-8Ph">
-                                                <rect key="frame" x="0.0" y="46" width="320" height="46"/>
-                                                <autoresizingMask key="autoresizingMask"/>
-                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="10" y="1" width="300" height="43"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                </view>
-                                            </tableViewCell>
-                                        </prototypes>
-                                    </tableView>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="dSQ-bb-RZe" userLabel="SongTable_3B">
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="320" id="6OF-GF-XoN"/>
-                                        </constraints>
-                                        <prototypes>
-                                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="YhX-zp-mB1">
-                                                <rect key="frame" x="0.0" y="46" width="320" height="46"/>
-                                                <autoresizingMask key="autoresizingMask"/>
-                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="10" y="1" width="300" height="43"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                </view>
-                                            </tableViewCell>
-                                        </prototypes>
-                                    </tableView>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="l2p-HS-WwY" userLabel="SongTabe_19">
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="320" id="ctS-Ve-o1g"/>
-                                        </constraints>
-                                        <prototypes>
-                                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="epg-dS-ztf">
-                                                <rect key="frame" x="0.0" y="46" width="320" height="46"/>
-                                                <autoresizingMask key="autoresizingMask"/>
-                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="10" y="1" width="300" height="43"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                </view>
-                                            </tableViewCell>
-                                        </prototypes>
-                                    </tableView>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Iuu-a4-qCi" userLabel="SongTable_SF">
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="320" id="NBZ-6Q-Ovd"/>
-                                        </constraints>
-                                        <prototypes>
-                                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="f1f-uw-PUH">
-                                                <rect key="frame" x="0.0" y="46" width="320" height="46"/>
-                                                <autoresizingMask key="autoresizingMask"/>
-                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="10" y="1" width="300" height="43"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                </view>
-                                            </tableViewCell>
-                                        </prototypes>
-                                    </tableView>
-                                </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="spb-t9-Nvy" firstAttribute="top" secondItem="i64-eT-SIN" secondAttribute="top" type="default" id="419-Le-buy"/>
-                                    <constraint firstItem="spb-t9-Nvy" firstAttribute="leading" secondItem="i64-eT-SIN" secondAttribute="leading" type="default" id="6UM-9y-yvJ"/>
-                                    <constraint firstItem="dSQ-bb-RZe" firstAttribute="bottom" secondItem="i64-eT-SIN" secondAttribute="bottom" type="default" id="6uh-sz-raP"/>
-                                    <constraint firstItem="spb-t9-Nvy" firstAttribute="bottom" secondItem="i64-eT-SIN" secondAttribute="bottom" type="default" id="BIe-SU-vK0"/>
-                                    <constraint firstItem="Iuu-a4-qCi" firstAttribute="trailing" secondItem="i64-eT-SIN" secondAttribute="trailing" type="default" id="G5i-Nv-19B"/>
-                                    <constraint firstItem="Iuu-a4-qCi" firstAttribute="leading" secondItem="i64-eT-SIN" secondAttribute="leading" constant="960" id="Hal-WU-ikX"/>
-                                    <constraint firstItem="Iuu-a4-qCi" firstAttribute="top" secondItem="i64-eT-SIN" secondAttribute="top" type="default" id="KIp-HR-n8W"/>
-                                    <constraint firstItem="dSQ-bb-RZe" firstAttribute="top" secondItem="i64-eT-SIN" secondAttribute="top" type="default" id="KNU-78-nyF"/>
-                                    <constraint firstItem="l2p-HS-WwY" firstAttribute="bottom" secondItem="i64-eT-SIN" secondAttribute="bottom" type="default" id="XgI-wl-ZBz"/>
-                                    <constraint firstItem="l2p-HS-WwY" firstAttribute="leading" secondItem="i64-eT-SIN" secondAttribute="leading" constant="640" id="cck-P7-lq6"/>
-                                    <constraint firstItem="Iuu-a4-qCi" firstAttribute="bottom" secondItem="i64-eT-SIN" secondAttribute="bottom" type="default" id="dwM-wG-iGF"/>
-                                    <constraint firstItem="dSQ-bb-RZe" firstAttribute="leading" secondItem="i64-eT-SIN" secondAttribute="leading" constant="320" id="f2K-wc-DHD"/>
-                                    <constraint firstItem="l2p-HS-WwY" firstAttribute="top" secondItem="i64-eT-SIN" secondAttribute="top" type="default" id="nTB-oW-Zxh"/>
-                                    <constraint firstItem="dSQ-bb-RZe" firstAttribute="centerY" secondItem="i64-eT-SIN" secondAttribute="centerY" type="default" id="qbK-6D-Llx"/>
-                                </constraints>
                             </scrollView>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="4" translatesAutoresizingMaskIntoConstraints="NO" id="Ie9-qR-EG6">
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="320" id="caU-Rb-pGw"/>
+                                    <constraint firstAttribute="width" constant="60" id="C9g-Hw-So3"/>
                                 </constraints>
                             </pageControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="i64-eT-SIN" firstAttribute="top" secondItem="17" secondAttribute="top" type="default" id="5zY-Bi-2k6"/>
-                            <constraint firstItem="Ie9-qR-EG6" firstAttribute="leading" secondItem="17" secondAttribute="leading" type="default" id="6Pl-0d-ZIL"/>
                             <constraint firstItem="i64-eT-SIN" firstAttribute="leading" secondItem="17" secondAttribute="leading" type="default" id="9GU-Hs-Asb"/>
                             <constraint firstItem="i64-eT-SIN" firstAttribute="bottom" secondItem="17" secondAttribute="bottom" type="default" id="D7A-cG-SDI"/>
                             <constraint firstAttribute="bottom" secondItem="Ie9-qR-EG6" secondAttribute="bottom" constant="1" id="QaN-tM-c1D"/>
                             <constraint firstItem="i64-eT-SIN" firstAttribute="trailing" secondItem="17" secondAttribute="trailing" type="default" id="hw5-Ex-Rsj"/>
+                            <constraint firstItem="Ie9-qR-EG6" firstAttribute="leading" secondItem="17" secondAttribute="leading" constant="130" id="uP2-tA-p0i"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="M52-Dd-vSM">
                         <nil key="title"/>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="UZY-Kl-SjC">
-                            <rect key="frame" x="466" y="4" width="347" height="36"/>
+                            <rect key="frame" x="5" y="4" width="310" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <segments>
@@ -175,15 +89,10 @@
                             </connections>
                         </segmentedControl>
                     </navigationItem>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="artistSelectionSegmentedController" destination="UZY-Kl-SjC" id="1Gu-Bz-mn4"/>
                         <outlet property="pageControl" destination="Ie9-qR-EG6" id="I8j-nW-tIT"/>
-                        <outlet property="scrollView" destination="i64-eT-SIN" id="z5U-JW-HBv"/>
-                        <outlet property="songListTable_19" destination="l2p-HS-WwY" id="y6F-BF-8gB"/>
-                        <outlet property="songListTable_3B" destination="dSQ-bb-RZe" id="JB3-Kw-B3r"/>
-                        <outlet property="songListTable_OK" destination="spb-t9-Nvy" id="Wek-j3-vOJ"/>
-                        <outlet property="songListTable_SF" destination="Iuu-a4-qCi" id="iUC-kT-hcT"/>
+                        <outlet property="scrollView" destination="i64-eT-SIN" id="nIm-pw-liA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="12" sceneMemberID="firstResponder"/>
@@ -377,6 +286,32 @@
             <point key="canvasLocation" x="675" y="-406"/>
         </scene>
     </scenes>
+    <classes>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="PlaceViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PlaceViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="placeListTable" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="PrettyNavigationBar" superclassName="UINavigationBar">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PrettyNavigationBar.h"/>
+        </class>
+        <class className="PrettyTabBar" superclassName="UITabBar">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PrettyTabBar.h"/>
+        </class>
+        <class className="SongViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SongViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="selectView:"/>
+                <relationship kind="outlet" name="artistSelectionSegmentedController" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="pageControl" candidateClass="UIPageControl"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
