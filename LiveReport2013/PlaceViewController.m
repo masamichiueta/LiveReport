@@ -59,7 +59,7 @@
 -(void) initToggleControl{
     toggleControlList = [NSMutableArray array];
     for(int i=0;i<[placeList count];i++){
-        PlaceToggleControl *toggleControl = [[PlaceToggleControl alloc] initWithFrame: CGRectMake(12,16,24,24)];
+        PlaceToggleControl *toggleControl = [[PlaceToggleControl alloc] initWithFrame: CGRectMake(0,0,60,60)];
         toggleControl.tag = i;
         [toggleControlList addObject:toggleControl];
     }

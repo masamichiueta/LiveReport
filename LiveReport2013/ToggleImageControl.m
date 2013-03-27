@@ -21,7 +21,9 @@
         // Initialization code
         _normalImage = [UIImage imageNamed: @"normal.png"];
         _selectedImage = [UIImage imageNamed: @"selected.png"];
-        _imageView = [[UIImageView alloc] initWithImage: _normalImage];
+        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 15.0, 25.0, 25.0)];
+        _imageView.image = _normalImage;
+        //_imageView = [[UIImageView alloc] initWithImage: _normalImage];
         [self addSubview:_imageView];
         
         

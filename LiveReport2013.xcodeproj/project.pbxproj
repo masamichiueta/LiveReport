@@ -37,6 +37,11 @@
 		6703138316FF22550023462C /* PostInfoUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 6703138216FF22550023462C /* PostInfoUtil.m */; };
 		6703138616FF47FF0023462C /* PlaceToggleControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 6703138516FF47FF0023462C /* PlaceToggleControl.m */; };
 		6703138916FF48AA0023462C /* SongToggleControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 6703138816FF48AA0023462C /* SongToggleControl.m */; };
+		677C90901703A2DE003E549D /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 677C908F1703A2DE003E549D /* UIImage+Resize.m */; };
+		677C90931703A912003E549D /* SocialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 677C90921703A912003E549D /* SocialViewController.m */; };
+		677C90961703A934003E549D /* PostListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 677C90951703A934003E549D /* PostListViewController.m */; };
+		677C90991703A942003E549D /* InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 677C90981703A942003E549D /* InfoViewController.m */; };
+		677C909F1703ADA8003E549D /* SongDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 677C909E1703ADA8003E549D /* SongDetailViewController.m */; };
 		679044B716F9CDFC002D29FA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 679044B616F9CDFC002D29FA /* QuartzCore.framework */; };
 		679044C216F9F542002D29FA /* PlaceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 679044C116F9F541002D29FA /* PlaceViewController.m */; };
 		679044C516F9F592002D29FA /* SongViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 679044C416F9F592002D29FA /* SongViewController.m */; };
@@ -124,6 +129,16 @@
 		6703138516FF47FF0023462C /* PlaceToggleControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceToggleControl.m; sourceTree = "<group>"; };
 		6703138716FF48AA0023462C /* SongToggleControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongToggleControl.h; sourceTree = "<group>"; };
 		6703138816FF48AA0023462C /* SongToggleControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongToggleControl.m; sourceTree = "<group>"; };
+		677C908E1703A2DE003E549D /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
+		677C908F1703A2DE003E549D /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
+		677C90911703A912003E549D /* SocialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialViewController.h; sourceTree = "<group>"; };
+		677C90921703A912003E549D /* SocialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialViewController.m; sourceTree = "<group>"; };
+		677C90941703A934003E549D /* PostListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostListViewController.h; sourceTree = "<group>"; };
+		677C90951703A934003E549D /* PostListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostListViewController.m; sourceTree = "<group>"; };
+		677C90971703A942003E549D /* InfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoViewController.h; sourceTree = "<group>"; };
+		677C90981703A942003E549D /* InfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoViewController.m; sourceTree = "<group>"; };
+		677C909D1703ADA8003E549D /* SongDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongDetailViewController.h; sourceTree = "<group>"; };
+		677C909E1703ADA8003E549D /* SongDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongDetailViewController.m; sourceTree = "<group>"; };
 		679044B616F9CDFC002D29FA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		679044C016F9F541002D29FA /* PlaceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceViewController.h; sourceTree = "<group>"; };
 		679044C116F9F541002D29FA /* PlaceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceViewController.m; sourceTree = "<group>"; };
@@ -190,6 +205,14 @@
 				679044C116F9F541002D29FA /* PlaceViewController.m */,
 				679044C316F9F591002D29FA /* SongViewController.h */,
 				679044C416F9F592002D29FA /* SongViewController.m */,
+				677C909D1703ADA8003E549D /* SongDetailViewController.h */,
+				677C909E1703ADA8003E549D /* SongDetailViewController.m */,
+				677C90911703A912003E549D /* SocialViewController.h */,
+				677C90921703A912003E549D /* SocialViewController.m */,
+				677C90941703A934003E549D /* PostListViewController.h */,
+				677C90951703A934003E549D /* PostListViewController.m */,
+				677C90971703A942003E549D /* InfoViewController.h */,
+				677C90981703A942003E549D /* InfoViewController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -211,6 +234,8 @@
 				6703137716FF007F0023462C /* ImageUtil.m */,
 				6703138116FF22550023462C /* PostInfoUtil.h */,
 				6703138216FF22550023462C /* PostInfoUtil.m */,
+				677C908E1703A2DE003E549D /* UIImage+Resize.h */,
+				677C908F1703A2DE003E549D /* UIImage+Resize.m */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -529,6 +554,11 @@
 				6703138316FF22550023462C /* PostInfoUtil.m in Sources */,
 				6703138616FF47FF0023462C /* PlaceToggleControl.m in Sources */,
 				6703138916FF48AA0023462C /* SongToggleControl.m in Sources */,
+				677C90901703A2DE003E549D /* UIImage+Resize.m in Sources */,
+				677C90931703A912003E549D /* SocialViewController.m in Sources */,
+				677C90961703A934003E549D /* PostListViewController.m in Sources */,
+				677C90991703A942003E549D /* InfoViewController.m in Sources */,
+				677C909F1703ADA8003E549D /* SongDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -91,7 +91,7 @@
         for(int j=0;j<[[songList objectAtIndex:i] count]; j++){
             NSMutableArray* toggleControlList_row = [NSMutableArray array];
             for(int k=0;k<[[[songList objectAtIndex:i] objectAtIndex:j] count]; k++){
-                SongToggleControl *toggleControl = [[SongToggleControl alloc] initWithFrame: CGRectMake(12,16,24,24)];
+                SongToggleControl *toggleControl = [[SongToggleControl alloc] initWithFrame: CGRectMake(0,0,60,60)];
                 toggleControl.tag = i;
                 toggleControl.section = j;
                 toggleControl.row = k;
@@ -252,6 +252,7 @@
     if (cell == nil) {
         cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
         cell.tableViewBackgroundColor = tableView.backgroundColor;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     //PrettyKitSetting
@@ -344,8 +345,14 @@
     }
 }
 
+//called when accessorybutton tapped
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"touched tableviewtag = %d,  section = %d, row = %d",tableView.tag, indexPath.section, indexPath.row);
+    [self performSegueWithIdentifier:@"itunesLink" sender:self];
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    NSLog(@"prepare For Segue");
 }
 
 //Called when song toggle is pushed
