@@ -79,6 +79,7 @@
             [song setObject:[rs stringForColumn:@"album"] forKey:@"album"];
             [song setObject:[rs stringForColumn:@"artist"] forKey:@"artist"];
             [song setObject:[rs stringForColumn:@"itunes"] forKey:@"itunes"];
+            [song setObject:[rs stringForColumn:@"album_pic"] forKey:@"album_pic"];
             
             [songList addObject:song];
             
@@ -115,6 +116,7 @@
                 [song setObject:[rs_album stringForColumn:@"album"] forKey:@"album"];
                 [song setObject:[rs_album stringForColumn:@"artist"] forKey:@"artist"];
                 [song setObject:[rs_album stringForColumn:@"itunes"] forKey:@"itunes"];
+                [song setObject:[rs_album stringForColumn:@"album_pic"] forKey:@"album_pic"];
                 [album_song addObject:song];
             }
             

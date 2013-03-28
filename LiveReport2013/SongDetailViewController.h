@@ -12,4 +12,9 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *songDetailTable;
 
+@property (strong, nonatomic) NSString *songName;
+@property (strong, nonatomic) NSString *albumName;
+@property (strong, nonatomic) NSString *albumPic;
+@property (strong, nonatomic) NSString *itunesLink;
+
 @end

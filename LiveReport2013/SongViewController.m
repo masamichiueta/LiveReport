@@ -7,6 +7,7 @@
 //
 
 #import "SongViewController.h"
+#import "SongDetailViewController.h"
 
 #import "SongToggleControl.h"
 #import "ImageUtil.h"
@@ -141,11 +142,13 @@
 
 }
 
+
 //For AutoLayout of ScrollView ( viewDidLoad does not load scrollview)
 - (void) viewDidAppear:(BOOL)animated{
-    
-    [self initScrollView];
-    [self initTableView];
+    if([songTableList count] == 0){
+        [self initScrollView];
+        [self initTableView];
+    }
 
 }
 
@@ -347,12 +350,22 @@
 
 //called when accessorybutton tapped
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"touched tableviewtag = %d,  section = %d, row = %d",tableView.tag, indexPath.section, indexPath.row);
+    currentTag = tableView.tag;
+    currentSection = indexPath.section;
+    currentRow = indexPath.row;
     [self performSegueWithIdentifier:@"itunesLink" sender:self];
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    NSLog(@"prepare For Segue");
+    if ( [[segue identifier] isEqualToString:@"itunesLink"] ) {
+        SongDetailViewController *songDetailViewController = [segue destinationViewController];
+        songDetailViewController.songName = [NSString stringWithString:[[[[songList objectAtIndex:currentTag] objectAtIndex:currentSection] objectAtIndex:currentRow] objectForKey:@"name"]];
+        songDetailViewController.albumName = [NSString stringWithString:[[[[songList objectAtIndex:currentTag] objectAtIndex:currentSection] objectAtIndex:currentRow] objectForKey:@"album"]];
+        songDetailViewController.albumPic = [NSString stringWithString:[[[[songList objectAtIndex:currentTag] objectAtIndex:currentSection] objectAtIndex:currentRow] objectForKey:@"album_pic"]];
+        songDetailViewController.itunesLink = [NSString stringWithString:[[[[songList objectAtIndex:currentTag] objectAtIndex:currentSection] objectAtIndex:currentRow] objectForKey:@"itunes"]];
+        
+    
+    }
 }
 
 //Called when song toggle is pushed

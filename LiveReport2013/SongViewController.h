@@ -15,6 +15,10 @@
     NSMutableArray *songTableList;
     NSMutableArray *toggleControlList;
     
+    int currentTag;
+    int currentSection;
+    int currentRow;
+    
 
 }
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
