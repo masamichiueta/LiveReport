@@ -26,6 +26,18 @@
     return self;
 }
 
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)FromInterfaceOrientation {
+    if(bannerIsVisible){
+        adBannerView.frame = CGRectMake(adBannerView.frame.origin.x, adBannerView.frame.origin.y, self.view.frame.size.width, adBannerView.frame.size.height);
+        _infoTable.frame = CGRectMake(_infoTable.frame.origin.x, _infoTable.frame.origin.y + adBannerView.frame.size.height, _infoTable.frame.size.width, _infoTable.frame.size.height - adBannerView.frame.size.height);
+    }
+    else{
+        _infoTable.frame = CGRectMake(_infoTable.frame.origin.x, 0, _infoTable.frame.size.width, self.view.frame.size.height);
+    }
+    
+}
+
+
 #pragma mark -
 #pragma mark Pretty Kit
 - (void) customizeNavBar {
@@ -50,6 +62,13 @@
     _infoTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
 }
 
+-(void) initIAd{
+    adBannerView = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
+    adBannerView.delegate = self;
+    adBannerView.frame = CGRectOffset(adBannerView.frame, 0.0, -adBannerView.frame.size.height);
+    bannerIsVisible=NO;
+    [self.view addSubview:adBannerView];
+}
 
 #pragma mark -
 #pragma mark View Life Cycle
@@ -59,6 +78,7 @@
 	// Do any additional setup after loading the view.
     [self customizeNavBar];
     [self initTableView];
+    [self initIAd];
 }
 
 - (void)didReceiveMemoryWarning
@@ -93,6 +113,16 @@
             
         default:
             break;
+    }
+    return 0;
+}
+
+
+-(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section{
+    if(section == ([_infoTable numberOfSections] -1)){
+        //Localize
+        NSString* tableFooter = NSLocalizedString(@"RockFordRecords Co., Ltd.", @"RockFordRecords Co., Ltd.");
+        return tableFooter;
     }
     return 0;
 }
@@ -161,6 +191,35 @@
     [_infoTable deselectRowAtIndexPath:[_infoTable indexPathForSelectedRow] animated:NO];
 }
 
+
+#pragma mark -
+#pragma mark AdBannerView Delegate Methods
+-(void)bannerViewDidLoadAd:(ADBannerView *)banner
+{
+    if (!bannerIsVisible)
+    {
+        [UIView beginAnimations:@"animateAdBannerOn" context:NULL];
+        banner.frame = CGRectOffset(banner.frame, 0, adBannerView.frame.size.height);
+        [UIView commitAnimations];
+        
+        bannerIsVisible = YES;
+        adBannerView.frame = CGRectMake(adBannerView.frame.origin.x, adBannerView.frame.origin.y, self.view.frame.size.width, adBannerView.frame.size.height);
+        _infoTable.frame = CGRectMake(_infoTable.frame.origin.x, _infoTable.frame.origin.y + adBannerView.frame.size.height, _infoTable.frame.size.width, _infoTable.frame.size.height - adBannerView.frame.size.height);
+    }
+}
+
+
+-(void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
+{
+    if (bannerIsVisible)
+    {
+        [UIView beginAnimations:@"animateAdBannerOff" context:NULL];
+        banner.frame = CGRectOffset(banner.frame, 0, -adBannerView.frame.size.height);
+        [UIView commitAnimations];
+        bannerIsVisible = NO;
+        _infoTable.frame = CGRectMake(_infoTable.frame.origin.x, 0, _infoTable.frame.size.width, self.view.frame.size.height);
+    }
+}
 
 
 @end

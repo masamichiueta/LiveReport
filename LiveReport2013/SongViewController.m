@@ -36,6 +36,7 @@
 
 #pragma mark -
 #pragma mark Rotation
+
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)FromInterfaceOrientation {
     _scrollView.contentOffset = CGPointMake(_scrollView.frame.size.width * _pageControl.currentPage, 0);
     for(int i=0; i<[songTableList count]; i++){
@@ -43,7 +44,22 @@
         songTable.frame = CGRectMake(_scrollView.bounds.size.width*i, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
     }
      _scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width*ARTIST_NUM, _scrollView.frame.size.height);
+    
+    if(bannerIsVisible){
+        adBannerView.frame = CGRectMake(adBannerView.frame.origin.x, adBannerView.frame.origin.y, self.view.frame.size.width, adBannerView.frame.size.height);
+        for(UITableView *songTable in songTableList){
+            songTable.frame = CGRectMake(songTable.frame.origin.x, songTable.frame.origin.y + adBannerView.frame.size.height, songTable.frame.size.width, songTable.frame.size.height - adBannerView.frame.size.height);
+        }
+    }
+    else{
+        for(UITableView *songTable in songTableList){
+            songTable.frame = CGRectMake(songTable.frame.origin.x, 0, songTable.frame.size.width,  self.view.frame.size.height);
+        }
+    }
+    
 }
+
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
 }
@@ -115,11 +131,12 @@
     
     songTableList = [NSMutableArray array];
     for(int i=0; i<ARTIST_NUM; i++){
+        
         UITableView *songTable = [[UITableView alloc] initWithFrame:CGRectMake(_scrollView.bounds.size.width*i, 0, _scrollView.frame.size.width, _scrollView.frame.size.height) style:UITableViewStyleGrouped];
+        
         songTable.delegate = self;
         songTable.dataSource = self;
         songTable.tag = i;
-        songTable.scrollsToTop = YES;
         [songTable dropShadows];
         songTable.backgroundView = nil;
         songTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
@@ -127,6 +144,15 @@
         [_scrollView addSubview:songTable];
     }
 }
+
+-(void) initIAd{
+    adBannerView = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
+    adBannerView.delegate = self;
+    adBannerView.frame = CGRectOffset(adBannerView.frame, 0.0, -adBannerView.frame.size.height);
+    bannerIsVisible=NO;
+    [self.view addSubview:adBannerView];
+}
+
 
 
 #pragma mark -
@@ -137,6 +163,7 @@
     [self customizeNavBar];
     [self initSongList];
     [self initToggleControl];
+    [self initIAd];
 
 }
 
@@ -147,6 +174,14 @@
         [self initScrollView];
         [self initTableView];
     }
+    
+    _scrollView.contentOffset = CGPointMake(_scrollView.frame.size.width * _pageControl.currentPage, 0);
+    for(int i=0; i<[songTableList count]; i++){
+        UITableView *songTable = [songTableList objectAtIndex:i];
+        songTable.frame = CGRectMake(_scrollView.bounds.size.width*i, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
+    }
+    _scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width*ARTIST_NUM, _scrollView.frame.size.height);
+    
 
 }
 
@@ -425,6 +460,40 @@
     NSLog(@"in table view song = %@", [songDic description]);
     
 }
+
+#pragma mark -
+#pragma mark AdBannerView Delegate Methods
+-(void)bannerViewDidLoadAd:(ADBannerView *)banner
+{
+    if (!bannerIsVisible)
+    {
+        [UIView beginAnimations:@"animateAdBannerOn" context:NULL];
+        banner.frame = CGRectOffset(banner.frame, 0, adBannerView.frame.size.height);
+        [UIView commitAnimations];
+        bannerIsVisible = YES;
+        adBannerView.frame = CGRectMake(adBannerView.frame.origin.x, adBannerView.frame.origin.y, self.view.frame.size.width, adBannerView.frame.size.height);
+        for(UITableView *songTable in songTableList){
+            songTable.frame = CGRectMake(songTable.frame.origin.x, songTable.frame.origin.y + adBannerView.frame.size.height, songTable.frame.size.width, songTable.frame.size.height - adBannerView.frame.size.height);
+        }
+    }
+}
+
+
+-(void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
+{
+    if (bannerIsVisible)
+    {
+        [UIView beginAnimations:@"animateAdBannerOff" context:NULL];
+        banner.frame = CGRectOffset(banner.frame, 0, -adBannerView.frame.size.height);
+        [UIView commitAnimations];
+        bannerIsVisible = NO;
+        for(UITableView *songTable in songTableList){
+            songTable.frame = CGRectMake(songTable.frame.origin.x, 0, songTable.frame.size.width,  self.view.frame.size.height);
+        }
+    }
+}
+
+
 
 
 

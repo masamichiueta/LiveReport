@@ -8,12 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "LiveReportDAO.h"
+#import "iAd/iAd.h"
 
-@interface SongViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>{
+@interface SongViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, ADBannerViewDelegate>{
     
     NSMutableArray *songList;
     NSMutableArray *songTableList;
     NSMutableArray *toggleControlList;
+    ADBannerView *adBannerView;
+    BOOL bannerIsVisible;
     
     int currentTag;
     int currentSection;

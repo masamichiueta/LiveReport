@@ -8,11 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "LiveReportDAO.h"
+#import "iAd/iAd.h"
 
-@interface PlaceViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>{
+@interface PlaceViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ADBannerViewDelegate>{
     
     NSMutableArray *placeList;
     NSMutableArray *toggleControlList;
+    ADBannerView *adBannerView;
+    BOOL bannerIsVisible;
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *placeListTable;

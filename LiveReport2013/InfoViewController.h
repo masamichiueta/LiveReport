@@ -7,8 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "iAd/iAd.h"
 
-@interface InfoViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
+@interface InfoViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, ADBannerViewDelegate>{
+    
+    ADBannerView *adBannerView;
+    BOOL bannerIsVisible;
+}
 
 @property (strong, nonatomic) IBOutlet UITableView *infoTable;
 

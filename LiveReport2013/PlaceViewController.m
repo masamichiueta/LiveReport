@@ -31,6 +31,18 @@
     return self;
 }
 
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)FromInterfaceOrientation {
+    if(bannerIsVisible){
+        adBannerView.frame = CGRectMake(adBannerView.frame.origin.x, adBannerView.frame.origin.y, self.view.frame.size.width, adBannerView.frame.size.height);
+        _placeListTable.frame = CGRectMake(_placeListTable.frame.origin.x, _placeListTable.frame.origin.y + adBannerView.frame.size.height, _placeListTable.frame.size.width, _placeListTable.frame.size.height - adBannerView.frame.size.height);
+    }
+    else{
+        _placeListTable.frame = CGRectMake(_placeListTable.frame.origin.x, 0, _placeListTable.frame.size.width, self.view.frame.size.height);
+    }
+    
+}
+
+
 #pragma mark -
 #pragma mark Pretty Kit
 - (void) customizeNavBar {
@@ -70,6 +82,16 @@
     [nc addObserver:self selector:@selector(placeTogglePushed:) name:@"PlaceTogglePushed" object:nil];
 }
 
+-(void) initIAd{
+    adBannerView = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
+    adBannerView.delegate = self;
+    adBannerView.frame = CGRectOffset(adBannerView.frame, 0.0, -adBannerView.frame.size.height);
+    bannerIsVisible=NO;
+    [self.view addSubview:adBannerView];
+}
+
+
+
 #pragma mark -
 #pragma mark View Life Cycle
 - (void)viewDidLoad
@@ -86,7 +108,10 @@
     
         
     [self initToggleControl];
+    [self initIAd];
+    
 }
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -167,6 +192,36 @@
 
     NSString *place = [[notification userInfo] objectForKey:@"Place"];
     NSLog(@"in table view place = %@", place);
+}
+
+
+#pragma mark -
+#pragma mark AdBannerView Delegate Methods
+-(void)bannerViewDidLoadAd:(ADBannerView *)banner
+{
+    if (!bannerIsVisible)
+    {
+        [UIView beginAnimations:@"animateAdBannerOn" context:NULL];
+        banner.frame = CGRectOffset(banner.frame, 0, adBannerView.frame.size.height);
+        [UIView commitAnimations];
+        
+        bannerIsVisible = YES;
+        adBannerView.frame = CGRectMake(adBannerView.frame.origin.x, adBannerView.frame.origin.y, self.view.frame.size.width, adBannerView.frame.size.height);
+        _placeListTable.frame = CGRectMake(_placeListTable.frame.origin.x, _placeListTable.frame.origin.y + adBannerView.frame.size.height, _placeListTable.frame.size.width, _placeListTable.frame.size.height - adBannerView.frame.size.height);
+    }
+}
+
+
+-(void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
+{
+    if (bannerIsVisible)
+    {
+        [UIView beginAnimations:@"animateAdBannerOff" context:NULL];
+        banner.frame = CGRectOffset(banner.frame, 0, -adBannerView.frame.size.height);
+        [UIView commitAnimations];
+        bannerIsVisible = NO;
+        _placeListTable.frame = CGRectMake(_placeListTable.frame.origin.x, 0, _placeListTable.frame.size.width, self.view.frame.size.height);
+    }
 }
 
 

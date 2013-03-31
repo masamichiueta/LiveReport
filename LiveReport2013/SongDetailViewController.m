@@ -32,6 +32,18 @@
     return self;
 }
 
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)FromInterfaceOrientation {
+    if(bannerIsVisible){
+        adBannerView.frame = CGRectMake(adBannerView.frame.origin.x, adBannerView.frame.origin.y, self.view.frame.size.width, adBannerView.frame.size.height);
+        _songDetailTable.frame = CGRectMake(_songDetailTable.frame.origin.x, _songDetailTable.frame.origin.y + adBannerView.frame.size.height, _songDetailTable.frame.size.width, _songDetailTable.frame.size.height - adBannerView.frame.size.height);
+    }
+    else{
+        _songDetailTable.frame = CGRectMake(_songDetailTable.frame.origin.x, 0, _songDetailTable.frame.size.width, self.view.frame.size.height);
+    }
+    
+}
+
+
 #pragma mark -
 #pragma mark Initialization
 - (void) initTableView{
@@ -42,6 +54,15 @@
     _songDetailTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
 }
 
+-(void) initIAd{
+    adBannerView = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
+    adBannerView.delegate = self;
+    adBannerView.frame = CGRectOffset(adBannerView.frame, 0.0, -adBannerView.frame.size.height);
+    bannerIsVisible=NO;
+    [self.view addSubview:adBannerView];
+}
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -49,6 +70,7 @@
     self.navigationItem.title = _songName;
     self.navigationController.navigationBar.tintColor = [UIColor darkGrayColor];
     [self initTableView];
+    [self initIAd];
     
 }
 
@@ -171,5 +193,33 @@
     [_songDetailTable deselectRowAtIndexPath:[_songDetailTable indexPathForSelectedRow] animated:NO];
 }
 
+#pragma mark -
+#pragma mark AdBannerView Delegate Methods
+-(void)bannerViewDidLoadAd:(ADBannerView *)banner
+{
+    if (!bannerIsVisible)
+    {
+        [UIView beginAnimations:@"animateAdBannerOn" context:NULL];
+        banner.frame = CGRectOffset(banner.frame, 0, adBannerView.frame.size.height);
+        [UIView commitAnimations];
+        
+        bannerIsVisible = YES;
+        adBannerView.frame = CGRectMake(adBannerView.frame.origin.x, adBannerView.frame.origin.y, self.view.frame.size.width, adBannerView.frame.size.height);
+        _songDetailTable.frame = CGRectMake(_songDetailTable.frame.origin.x, _songDetailTable.frame.origin.y + adBannerView.frame.size.height, _songDetailTable.frame.size.width, _songDetailTable.frame.size.height - adBannerView.frame.size.height);
+    }
+}
+
+
+-(void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
+{
+    if (bannerIsVisible)
+    {
+        [UIView beginAnimations:@"animateAdBannerOff" context:NULL];
+        banner.frame = CGRectOffset(banner.frame, 0, -adBannerView.frame.size.height);
+        [UIView commitAnimations];
+        bannerIsVisible = NO;
+        _songDetailTable.frame = CGRectMake(_songDetailTable.frame.origin.x, 0, _songDetailTable.frame.size.width, self.view.frame.size.height);
+    }
+}
 
 @end

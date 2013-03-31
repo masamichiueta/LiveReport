@@ -30,6 +30,18 @@
     return self;
 }
 
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)FromInterfaceOrientation {
+    if(bannerIsVisible){
+        adBannerView.frame = CGRectMake(adBannerView.frame.origin.x, adBannerView.frame.origin.y, self.view.frame.size.width, adBannerView.frame.size.height);
+        _postListTable.frame = CGRectMake(_postListTable.frame.origin.x, _postListTable.frame.origin.y + adBannerView.frame.size.height, _postListTable.frame.size.width, _postListTable.frame.size.height - adBannerView.frame.size.height);
+    }
+    else{
+        _postListTable.frame = CGRectMake(_postListTable.frame.origin.x, 0, _postListTable.frame.size.width, self.view.frame.size.height);
+    }
+    
+}
+
+
 #pragma mark -
 #pragma mark Pretty Kit
 - (void) customizeNavBar {
@@ -68,6 +80,15 @@
 	[refreshHeaderView refreshLastUpdatedDate];
 }
 
+-(void) initIAd{
+    adBannerView = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
+    adBannerView.delegate = self;
+    adBannerView.frame = CGRectOffset(adBannerView.frame, 0.0, -adBannerView.frame.size.height);
+    bannerIsVisible=NO;
+    [self.view addSubview:adBannerView];
+}
+
+
 
 #pragma mark -
 #pragma mark View Life Cycle
@@ -78,6 +99,7 @@
     [self customizeNavBar];
     [self initTableView];
     [self initEGORefreshTableHeaderView];
+    [self initIAd];
     
     tweetList = [NSMutableArray array];
     imageStore = [[ImageStore alloc] initWithDelegate:self];
@@ -113,7 +135,11 @@
         size.width = _postListTable.frame.size.width;
         size.height = TweetMaxCellHeight;
         size = [cellForHeight sizeThatFits:size];
-        return size.height;
+        
+        if(size.height < TweetMinCellHeight){
+            return TweetMinCellHeight;
+        }
+        else    return size.height;
     }
     else return 60;
 }
@@ -123,6 +149,15 @@
         return [tweetList count];
     }
     else return 1;
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section{
+    if(section == ([_postListTable numberOfSections] -1)){
+        //Localize
+        NSString* tableFooter = NSLocalizedString(@"RockFordRecords Co., Ltd.", @"RockFordRecords Co., Ltd.");
+        return tableFooter;
+    }
+    return 0;
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -290,6 +325,37 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [_postListTable reloadData];
     
+}
+
+
+
+#pragma mark -
+#pragma mark AdBannerView Delegate Methods
+-(void)bannerViewDidLoadAd:(ADBannerView *)banner
+{
+    if (!bannerIsVisible)
+    {
+        [UIView beginAnimations:@"animateAdBannerOn" context:NULL];
+        banner.frame = CGRectOffset(banner.frame, 0, adBannerView.frame.size.height);
+        [UIView commitAnimations];
+        
+        bannerIsVisible = YES;
+        adBannerView.frame = CGRectMake(adBannerView.frame.origin.x, adBannerView.frame.origin.y, self.view.frame.size.width, adBannerView.frame.size.height);
+        _postListTable.frame = CGRectMake(_postListTable.frame.origin.x, _postListTable.frame.origin.y + adBannerView.frame.size.height, _postListTable.frame.size.width, _postListTable.frame.size.height - adBannerView.frame.size.height);
+    }
+}
+
+
+-(void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
+{
+    if (bannerIsVisible)
+    {
+        [UIView beginAnimations:@"animateAdBannerOff" context:NULL];
+        banner.frame = CGRectOffset(banner.frame, 0, -adBannerView.frame.size.height);
+        [UIView commitAnimations];
+        bannerIsVisible = NO;
+        _postListTable.frame = CGRectMake(_postListTable.frame.origin.x, 0, _postListTable.frame.size.width, self.view.frame.size.height);
+    }
 }
 
 

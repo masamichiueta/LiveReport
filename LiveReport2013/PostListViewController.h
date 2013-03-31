@@ -9,15 +9,18 @@
 #import <UIKit/UIKit.h>
 #import "EGORefreshTableHeaderView.h"
 #import "ImageStore.h"
+#import "iAd/iAd.h"
 
 
-@interface PostListViewController : UIViewController<UITableViewDataSource, UITableViewDelegate,EGORefreshTableHeaderDelegate, NSURLConnectionDelegate>{
+@interface PostListViewController : UIViewController<UITableViewDataSource, UITableViewDelegate,EGORefreshTableHeaderDelegate, NSURLConnectionDelegate, ADBannerViewDelegate>{
     
     EGORefreshTableHeaderView *refreshHeaderView;
     BOOL reloading;
     NSMutableArray *tweetList;
     NSMutableData* tweetData;
     ImageStore *imageStore;
+    ADBannerView *adBannerView;
+    BOOL bannerIsVisible;
     
 }
 
