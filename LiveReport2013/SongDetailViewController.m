@@ -37,6 +37,7 @@
 - (void) initTableView{
     _songDetailTable.delegate = self;
     _songDetailTable.dataSource = self;
+    _songDetailTable.scrollsToTop = YES;
     [_songDetailTable dropShadows];
     _songDetailTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
 }
@@ -84,6 +85,15 @@
     return 0;
 }
 
+-(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section{
+    if(section == ([_songDetailTable numberOfSections] -1)){
+        //Localize
+        NSString* tableFooter = NSLocalizedString(@"RockFordRecords Co., Ltd.", @"RockFordRecords Co., Ltd.");
+        return tableFooter;
+    }
+    return 0;
+}
+
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     switch (indexPath.section) {
@@ -109,7 +119,7 @@
     
     PrettyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell.tableViewBackgroundColor = tableView.backgroundColor;
     }
     

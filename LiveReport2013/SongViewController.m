@@ -24,9 +24,6 @@
 @synthesize liveReportObj = _liveReportObj;
 @synthesize artistSelectionSegmentedController = _artistSelectionSegmentedController;
 
-
-#define ARTIST_NUM 4
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -122,6 +119,7 @@
         songTable.delegate = self;
         songTable.dataSource = self;
         songTable.tag = i;
+        songTable.scrollsToTop = YES;
         [songTable dropShadows];
         songTable.backgroundView = nil;
         songTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
@@ -188,7 +186,7 @@
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     switch (tableView.tag) {
         case 0:
-            return [[songList objectAtIndex:0] count];
+            return [[songList objectAtIndex:0] count] + 1;
             break;
         case 1:
             return [[songList objectAtIndex:1] count];
@@ -220,6 +218,17 @@
     return NULL;
 }
 
+-(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section{
+    if(section == ([[songTableList objectAtIndex:tableView.tag] numberOfSections] -1)){
+        //Localize
+        NSString* tableFooter = NSLocalizedString(@"RockFordRecords Co., Ltd.", @"RockFordRecords Co., Ltd.");
+        return tableFooter;
+    }
+    return 0;
+}
+
+
+
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -228,8 +237,17 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     switch (tableView.tag) {
-        case 0:
-            return [[[songList objectAtIndex:0] objectAtIndex:section] count];
+        case 0:{
+            switch (section) {
+                case 0:
+                    return 1;
+                    break;
+                    
+                default:
+                    return [[[songList objectAtIndex:0] objectAtIndex:section - 1] count];
+                    break;
+            }
+        }
             break;
         case 1:
             return [[[songList objectAtIndex:1] objectAtIndex:section] count];
@@ -249,59 +267,89 @@
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    static NSString *CellIdentifier = @"Cell";
+    if(tableView.tag == 0 && indexPath.section == 0){
+        static NSString *CellIdentifier = @"ResetCell";
+        PrettyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+            cell.tableViewBackgroundColor = tableView.backgroundColor;
+        }
+        //PrettyKitSetting
+        cell.textLabel.adjustsFontSizeToFitWidth = YES;
+        cell.textLabel.numberOfLines = 2;
+        cell.textLabel.minimumScaleFactor = 10;
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:10];
+        cell.cornerRadius = 5;
+        cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
+        cell.borderColor = [UIColor colorWithHex:0xCC3599];
+        [cell prepareForTableView:tableView indexPath:indexPath];
+        cell.textLabel.text = NSLocalizedString(@"Reset SetList", @"Reset Set List");
+        return cell;
+    }
+    else{
+        static NSString *CellIdentifier = @"Cell";
+        
+        PrettyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+            cell.tableViewBackgroundColor = tableView.backgroundColor;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+        }
+        
+        //PrettyKitSetting
+        cell.textLabel.adjustsFontSizeToFitWidth = YES;
+        cell.textLabel.numberOfLines = 2;
+        cell.textLabel.minimumScaleFactor = 10;
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:10];
+        cell.cornerRadius = 5;
+        cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
+        cell.borderColor = [UIColor colorWithHex:0xCC3599];
+        [cell prepareForTableView:tableView indexPath:indexPath];
+        
     
-    PrettyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        cell.tableViewBackgroundColor = tableView.backgroundColor;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        //Cell Accessory 
+        UIButton *myAccessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
+        [myAccessoryButton setBackgroundColor:[UIColor clearColor]];
+        [myAccessoryButton setImage:[UIImage imageNamed:@"custom_accessory"] forState:UIControlStateNormal];
+        [myAccessoryButton setImage:[UIImage imageNamed:@"custom_accessory_touched"] forState:UIControlStateHighlighted];
+        [myAccessoryButton addTarget:self action:@selector(myAccessoryTouched:event:)forControlEvents:UIControlEventTouchUpInside];
+        [cell setAccessoryView:myAccessoryButton];
+        
+        
+        //Cell Content
+        switch (tableView.tag) {
+            case 0:
+                cell.textLabel.text = [[[[songList objectAtIndex:0] objectAtIndex:indexPath.section - 1] objectAtIndex:indexPath.row] objectForKey:@"name"];
+                //Check Mark
+                cell.imageView.image = [ImageUtil imageWithColor:[UIColor clearColor]];
+                [cell.contentView addSubview:[[[toggleControlList objectAtIndex:tableView.tag] objectAtIndex:indexPath.section - 1] objectAtIndex:indexPath.row]];
+                break;
+            case 1:
+                cell.textLabel.text = [[[[songList objectAtIndex:1] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
+                //Check Mark
+                cell.imageView.image = [ImageUtil imageWithColor:[UIColor clearColor]];
+                [cell.contentView addSubview:[[[toggleControlList objectAtIndex:tableView.tag] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
+                break;
+            case 2:
+                cell.textLabel.text = [[[[songList objectAtIndex:2] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
+                //Check Mark
+                cell.imageView.image = [ImageUtil imageWithColor:[UIColor clearColor]];
+                [cell.contentView addSubview:[[[toggleControlList objectAtIndex:tableView.tag] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
+                break;
+            case 3:
+                cell.textLabel.text = [[[[songList objectAtIndex:3] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
+                //Check Mark
+                cell.imageView.image = [ImageUtil imageWithColor:[UIColor clearColor]];
+                [cell.contentView addSubview:[[[toggleControlList objectAtIndex:tableView.tag] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
+                break;
+            default:
+                break;
+        }
+        return cell;
     }
     
-    //PrettyKitSetting
-    cell.textLabel.adjustsFontSizeToFitWidth = YES;
-    cell.textLabel.numberOfLines = 2;
-    cell.textLabel.minimumScaleFactor = 10;
-    cell.textLabel.font = [UIFont boldSystemFontOfSize:10];
-    cell.cornerRadius = 5;
-    cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
-    cell.borderColor = [UIColor colorWithHex:0xCC3599];
-    [cell prepareForTableView:tableView indexPath:indexPath];
-    cell.detailTextLabel.textAlignment = NSTextAlignmentRight;
     
-    //Cell Accessory 
-    UIButton *myAccessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
-    [myAccessoryButton setBackgroundColor:[UIColor clearColor]];
-    [myAccessoryButton setImage:[UIImage imageNamed:@"custom_accessory"] forState:UIControlStateNormal];
-    [myAccessoryButton setImage:[UIImage imageNamed:@"custom_accessory_touched"] forState:UIControlStateHighlighted];
-    [myAccessoryButton addTarget:self action:@selector(myAccessoryTouched:event:)forControlEvents:UIControlEventTouchUpInside];
-    [cell setAccessoryView:myAccessoryButton];
-    
-    
-    //Cell Content
-    switch (tableView.tag) {
-        case 0:
-            cell.textLabel.text = [[[[songList objectAtIndex:0] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
-            break;
-        case 1:
-            cell.textLabel.text = [[[[songList objectAtIndex:1] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
-            break;
-        case 2:
-            cell.textLabel.text = [[[[songList objectAtIndex:2] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
-            break;
-        case 3:
-            cell.textLabel.text = [[[[songList objectAtIndex:3] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] objectForKey:@"name"];
-            break;
-        default:
-            break;
-    }
-    
-    
-    //Check Mark
-    cell.imageView.image = [ImageUtil imageWithColor:[UIColor clearColor]];
-    [cell.contentView addSubview:[[[toggleControlList objectAtIndex:tableView.tag] objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
-    
-    return cell;
     
 }
 
@@ -351,7 +399,9 @@
 //called when accessorybutton tapped
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     currentTag = tableView.tag;
-    currentSection = indexPath.section;
+    if(currentTag == 0){
+        currentSection = indexPath.section - 1;
+    }
     currentRow = indexPath.row;
     [self performSegueWithIdentifier:@"itunesLink" sender:self];
 }

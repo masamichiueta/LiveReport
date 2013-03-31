@@ -45,6 +45,7 @@
 - (void) initTableView{
     _infoTable.delegate = self;
     _infoTable.dataSource = self;
+    _infoTable.scrollsToTop = YES;
     [_infoTable dropShadows];
     _infoTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
 }
@@ -75,10 +76,25 @@
 }
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    
-    //Localize
-    NSString* tableHeader = NSLocalizedString(@"Social Connection", @"Social Connection");
-    return tableHeader;
+    switch (section) {
+        case 0:{
+            //Localize
+            NSString* tableHeader = NSLocalizedString(@"RockFordRecords Co,. Ltd.", @"RockFordRecords Co,. Ltd.");
+            return tableHeader;
+        }
+        
+        case 1:{
+            //Localize
+            NSString* tableHeader = NSLocalizedString(@"Developer", @"Developer");
+            return tableHeader;
+        }
+            
+            break;
+            
+        default:
+            break;
+    }
+    return 0;
 }
 
 
@@ -110,14 +126,41 @@
     cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
     cell.borderColor = [UIColor colorWithHex:0xCC3599];
     [cell prepareForTableView:tableView indexPath:indexPath];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     //Cell Content
-    cell.textLabel.text = @"ソーシャル";
-    
+    switch (indexPath.section) {
+        case 0:
+            cell.textLabel.text = @"RockFordRecords Co,. Ltd.";
+            break;
+            
+        case 1:
+            cell.textLabel.text = @"Developer";
+            break;
+            
+        default:
+            break;
+    }
     
     return cell;
     
 }
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    switch (indexPath.section) {
+        case 0:
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString: ROCKFORDRECORDS_URL]];
+            break;
+        case 1:
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString: DEVELOPER_URL]];
+            break;
+            
+        default:
+            break;
+    }
+    [_infoTable deselectRowAtIndexPath:[_infoTable indexPathForSelectedRow] animated:NO];
+}
+
 
 
 @end

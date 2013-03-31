@@ -8,6 +8,8 @@
 
 #import "SocialViewController.h"
 
+#import <Social/Social.h>
+
 #import "PrettyKit.h"
 
 @interface SocialViewController ()
@@ -45,6 +47,7 @@
 - (void) initTableView{
     _socialTable.delegate = self;
     _socialTable.dataSource = self;
+    _socialTable.scrollsToTop = YES;
     [_socialTable dropShadows];
     _socialTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
 }
@@ -76,11 +79,37 @@
 }
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    
-    //Localize
-    NSString* tableHeader = NSLocalizedString(@"Social Connection", @"Social Connection");
-    return tableHeader;
+    switch (section) {
+        case 0:{
+            //Localize
+            NSString* tableHeader = NSLocalizedString(@"Facebook", @"Facebook");
+            return tableHeader;
+        }
+            break;
+        
+        case 1:{
+            //Localize
+            NSString* tableHeader = NSLocalizedString(@"Twitter", @"Twitter");
+            return tableHeader;
+        }
+            break;
+            
+        default:
+            break;
+    }
+    return 0;
 }
+
+-(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section{
+    if(section == ([_socialTable numberOfSections] -1)){
+        //Localize
+        NSString* tableFooter = NSLocalizedString(@"RockFordRecords Co., Ltd.", @"RockFordRecords Co., Ltd.");
+        return tableFooter;
+    }
+    return 0;
+}
+
+
 
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -113,10 +142,49 @@
     [cell prepareForTableView:tableView indexPath:indexPath];
     
     //Cell Content
-    cell.textLabel.text = @"ソーシャル";
+    switch (indexPath.section) {
+        case 0:
+            cell.textLabel.text = NSLocalizedString(@"Post to Facebook", @"Post to Facebook");
+            cell.imageView.image = [UIImage imageNamed:@"facebook"];
+            break;
+        
+        case 1:
+            cell.textLabel.text = NSLocalizedString(@"Post to Twitter", @"Post to Twitter");
+            cell.imageView.image = [UIImage imageNamed:@"twitter"];
+            break;
+            
+        default:
+            break;
+    }
     
     
     return cell;
+    
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    [_socialTable deselectRowAtIndexPath:[_socialTable indexPathForSelectedRow] animated:NO];
+    switch (indexPath.section) {
+        case 0:{
+            SLComposeViewController *facebookPostViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+            [facebookPostViewController setInitialText:@"facebook投稿テスト"];
+            //[facebookPostVC addImage:[UIImage imageNamed:@"EUI.jpg"]];
+            [self presentViewController:facebookPostViewController animated:YES completion:nil];
+        }
+            break;
+            
+        case 1:{
+            SLComposeViewController *twitterPostViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+            [twitterPostViewController setInitialText:@"twitter投稿テスト"];
+            [self presentViewController:twitterPostViewController animated:YES completion:nil];
+        }
+            
+            break;
+        default:
+            break;
+    }
+    
     
 }
 

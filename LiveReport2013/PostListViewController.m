@@ -8,7 +8,11 @@
 
 #import "PostListViewController.h"
 
+#import "TweetData.h"
+#import "TwitterTableViewCell.h"
+
 #import "PrettyKit.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface PostListViewController ()
 
@@ -45,8 +49,23 @@
 - (void) initTableView{
     _postListTable.delegate = self;
     _postListTable.dataSource = self;
+    _postListTable.scrollsToTop = YES;
     [_postListTable dropShadows];
     _postListTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
+}
+
+- (void) initEGORefreshTableHeaderView{
+    if (refreshHeaderView == nil) {
+		
+		EGORefreshTableHeaderView *view = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - _postListTable.bounds.size.height, _postListTable.frame.size.width, _postListTable.bounds.size.height)];
+		view.delegate = self;
+		[_postListTable addSubview:view];
+		refreshHeaderView = view;
+		
+	}
+	
+	//  update the last update date
+	[refreshHeaderView refreshLastUpdatedDate];
 }
 
 
@@ -58,6 +77,13 @@
 	// Do any additional setup after loading the view.
     [self customizeNavBar];
     [self initTableView];
+    [self initEGORefreshTableHeaderView];
+    
+    tweetList = [NSMutableArray array];
+    imageStore = [[ImageStore alloc] initWithDelegate:self];
+    
+    [self getTweets];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -71,51 +97,198 @@
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     
-    return 2;
+    return 1;
 }
 
--(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    
-    //Localize
-    NSString* tableHeader = NSLocalizedString(@"Social Connection", @"Social Connection");
-    return tableHeader;
-}
 
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return 60;
+    if([tweetList count] != 0){
+        TweetData *tweet = [tweetList objectAtIndex:indexPath.row];
+        TwitterTableViewCell *cellForHeight = [[TwitterTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
+        [cellForHeight setupRowData:tweet];
+        
+        CGSize size;
+        size.width = _postListTable.frame.size.width;
+        size.height = TweetMaxCellHeight;
+        size = [cellForHeight sizeThatFits:size];
+        return size.height;
+    }
+    else return 60;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 1;
+    if([tweetList count] != 0){
+        return [tweetList count];
+    }
+    else return 1;
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     static NSString *CellIdentifier = @"Cell";
     
-    PrettyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    TwitterTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell = [[TwitterTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
         cell.tableViewBackgroundColor = tableView.backgroundColor;
     }
     
-    //PrettyKitSetting
-    cell.textLabel.adjustsFontSizeToFitWidth = YES;
-    cell.textLabel.numberOfLines = 2;
-    cell.textLabel.minimumScaleFactor = 10;
-    cell.textLabel.font = [UIFont boldSystemFontOfSize:10];
     cell.cornerRadius = 5;
     cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
     cell.borderColor = [UIColor colorWithHex:0xCC3599];
     [cell prepareForTableView:tableView indexPath:indexPath];
     
-    //Cell Content
-    cell.textLabel.text = @"ソーシャル";
-    
+    if([tweetList count] != 0){
+        cell.textLabel.text = nil;
+        [cell setupRowData:[tweetList objectAtIndex:indexPath.row]];
+        
+        UIImage *iconImage = [imageStore getImage:[[tweetList objectAtIndex:indexPath.row] iconImageURL]];
+        
+        
+        if(iconImage != nil){
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            cell.imageView.image = iconImage;
+            cell.imageView.layer.masksToBounds = YES;
+            cell.imageView.layer.cornerRadius = 5.0f;
+        }
+        else {
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+            cell.imageView.image = [UIImage imageNamed:@"nouser"];
+        }
+    }
+    else{
+        cell.textLabel.text = NSLocalizedString(@"No Result", @"No Result");
+    }
+
     
     return cell;
+    
+}
+
+
+#pragma mark -
+#pragma mark Data Source Loading / Reloading Methods
+
+- (void)reloadTableViewDataSource{
+	
+	//  should be calling your tableviews data source model to reload
+	//  put here just for demo
+	reloading = YES;
+    
+    [self getTweets];
+	
+}
+
+- (void)doneLoadingTableViewData{
+	
+	//  model should call this when its done loading
+	reloading = NO;
+	[refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_postListTable];
+	
+}
+
+
+#pragma mark -
+#pragma mark UIScrollViewDelegate Methods
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+	
+	[refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+    
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+	
+	[refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
+	
+}
+
+
+#pragma mark -
+#pragma mark EGORefreshTableHeaderDelegate Methods
+
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view{
+	
+	[self reloadTableViewDataSource];
+	[self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:3.0];
+	
+}
+
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view{
+	
+	return reloading; // should return if data source model is reloading
+	
+}
+
+- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view{
+	
+	return [NSDate date]; // should return date data source was last changed
+	
+}
+
+
+
+- (void)getTweets{
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:TWITTER_SEARCH]];
+    NSURLConnection* connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    if(!connection){
+        NSLog(@"connectino error");
+    }
+}
+
+#pragma mark -
+#pragma mark NSURLConnection Delegate Method
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
+    NSLog(@"didReceiveResponse");
+    
+    tweetData = [[NSMutableData alloc] init];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
+    NSLog(@"didReceiveData");
+    
+    [tweetData appendData:data];
+    
+    
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
+    NSLog(@"didFailWithError");
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    if(reloading) [self doneLoadingTableViewData];
+
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection{
+    NSLog(@"connectionDidFinishLoading");
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [tweetList removeAllObjects];
+    
+    NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:tweetData options:0 error:nil];
+    
+    for(int i=0; i<[[jsonDictionary objectForKey:@"results"] count]; i++){
+        TweetData *rowData = [[TweetData alloc] init];
+        rowData.userName = [[[jsonDictionary objectForKey:@"results"] objectAtIndex:i] objectForKey:@"from_user"];
+        rowData.status = [[[jsonDictionary objectForKey:@"results"] objectAtIndex:i] objectForKey:@"text"];
+        rowData.createdAt = [[[jsonDictionary objectForKey:@"results"] objectAtIndex:i] objectForKey:@"created_at"];
+        rowData.iconImageURL = [[[jsonDictionary objectForKey:@"results"] objectAtIndex:i] objectForKey:@"profile_image_url"];
+        [tweetList addObject:rowData];
+    }
+    [_postListTable reloadData];
+    if(reloading) [self doneLoadingTableViewData];
+}
+
+
+#pragma mark -
+#pragma mark - ImageStore Delegate Methods
+- (void)imageStoreDidGetNewImage:(ImageStore*)sender url:(NSString*)url
+{
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [_postListTable reloadData];
     
 }
 
