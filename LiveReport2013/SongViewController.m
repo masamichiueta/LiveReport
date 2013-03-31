@@ -431,6 +431,16 @@
     }
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    //Reset Button
+    if(tableView.tag == 0 && indexPath.section == 0){
+        UIAlertView *alert =
+        [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Reset SetList", @"Reset Set List") message:NSLocalizedString(@"Do you want to reset setlist?", @"Do you want to reset setlist?") delegate:self cancelButtonTitle:NSLocalizedString(@"No", @"No") otherButtonTitles:NSLocalizedString(@"Yes", @"Yes"), nil];
+        [alert show];
+        [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:NO];
+    }
+}
+
 //called when accessorybutton tapped
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     currentTag = tableView.tag;
@@ -458,6 +468,21 @@
     
     NSDictionary *songDic = [[notification userInfo] objectForKey:@"Song"];
     NSLog(@"in table view song = %@", [songDic description]);
+    
+}
+
+#pragma mark -
+#pragma mark UIAlertView Delegate Methods
+-(void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    switch (buttonIndex) {
+        case 0:
+            
+            break;
+        case 1:
+            NSLog(@"reset setlist");
+            break;
+    }
     
 }
 

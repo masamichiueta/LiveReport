@@ -10,7 +10,7 @@
 #import "LiveReportDAO.h"
 #import "iAd/iAd.h"
 
-@interface SongViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, ADBannerViewDelegate>{
+@interface SongViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, ADBannerViewDelegate, UIAlertViewDelegate>{
     
     NSMutableArray *songList;
     NSMutableArray *songTableList;
