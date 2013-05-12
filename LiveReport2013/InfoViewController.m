@@ -49,6 +49,7 @@
     navBar.bottomLineColor = [UIColor colorWithHex:0xCC3599];
     navBar.shadowOpacity = 0.0;
     navBar.roundedCornerRadius = 10;
+    self.navigationItem.title = NSLocalizedString(@"Information", @"Informtaion");
     
 }
 
@@ -156,7 +157,7 @@
             break;
             
         case 1:
-            cell.textLabel.text = @"Developer";
+            cell.textLabel.text = NSLocalizedString(@"Developer", @"Developer");
             break;
             
         default:

@@ -56,6 +56,7 @@
     navBar.shadowOpacity = 0.0;
     //navBar.tintColor = navBar.gradientEndColor;
     navBar.roundedCornerRadius = 10;
+    self.navigationItem.title = NSLocalizedString(@"Place List", @"Place List");
     
 }
 
