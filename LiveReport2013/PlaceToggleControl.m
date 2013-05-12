@@ -9,6 +9,7 @@
 #import "PlaceToggleControl.h"
 
 @implementation PlaceToggleControl
+@synthesize placeName=_placeName;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -23,8 +24,9 @@
 - (void) togglePushed{
     [super togglePushed];
     
-    NSDictionary *dict = [NSDictionary dictionaryWithObject: [NSNumber numberWithInt:self.tag] forKey: @"Place"];
-    [[NSNotificationCenter defaultCenter] postNotificationName: @"PlaceTogglePushed" object: self userInfo: dict];
+    NSDictionary *placeInfo = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:self.tag], @"tag",  _placeName,@"placeName", [NSNumber numberWithInt:self.selected], @"selected", nil];
+    NSDictionary *sendDict = [NSDictionary dictionaryWithObject: placeInfo forKey: @"Place"];
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"PlaceTogglePushed" object: self userInfo: sendDict];
     
 }
 

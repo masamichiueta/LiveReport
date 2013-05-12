@@ -151,14 +151,6 @@
     else return 1;
 }
 
--(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section{
-    if(section == ([_postListTable numberOfSections] -1)){
-        //Localize
-        NSString* tableFooter = NSLocalizedString(@"RockFordRecords Co., Ltd.", @"RockFordRecords Co., Ltd.");
-        return tableFooter;
-    }
-    return 0;
-}
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     

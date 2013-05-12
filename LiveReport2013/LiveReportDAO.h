@@ -20,6 +20,7 @@
 -(void)connect;
 -(NSMutableArray *)getPlaceList;
 -(NSMutableArray *)getSongList;
--(NSMutableArray *)getSongList:(NSString *) artist;
+-(NSMutableArray *)getSongListByArtist:(NSString *) artist;
+
 
 @end

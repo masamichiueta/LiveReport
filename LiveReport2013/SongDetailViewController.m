@@ -107,15 +107,6 @@
     return 0;
 }
 
--(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section{
-    if(section == ([_songDetailTable numberOfSections] -1)){
-        //Localize
-        NSString* tableFooter = NSLocalizedString(@"RockFordRecords Co., Ltd.", @"RockFordRecords Co., Ltd.");
-        return tableFooter;
-    }
-    return 0;
-}
-
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     switch (indexPath.section) {

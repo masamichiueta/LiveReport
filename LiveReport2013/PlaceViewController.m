@@ -10,6 +10,7 @@
 
 #import "PlaceToggleControl.h"
 #import "ImageUtil.h"
+#import "PostInfoUtil.h"
 
 #import "PrettyKit.h"
 
@@ -74,6 +75,7 @@
     for(int i=0;i<[placeList count];i++){
         PlaceToggleControl *toggleControl = [[PlaceToggleControl alloc] initWithFrame: CGRectMake(0,0,60,60)];
         toggleControl.tag = i;
+        toggleControl.placeName = [[placeList objectAtIndex:i] objectForKey:@"name"];
         [toggleControlList addObject:toggleControl];
     }
 
@@ -135,13 +137,6 @@
     return tableHeader;
 }
 
--(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section{
-    //Localize
-    NSString* tableFooter = NSLocalizedString(@"RockFordRecords Co., Ltd.", @"RockFordRecords Co., Ltd.");
-    return tableFooter;
-}
-
-
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -190,8 +185,22 @@
 //Called when place toggle is pushed
 -(void)placeTogglePushed:(NSNotification*) notification{
 
-    NSString *place = [[notification userInfo] objectForKey:@"Place"];
-    NSLog(@"in table view place = %@", place);
+    NSDictionary *placeDic = [[notification userInfo] objectForKey:@"Place"];
+    for(int i=0; i<[toggleControlList count]; i++){
+        PlaceToggleControl *toggleControl = [toggleControlList objectAtIndex:i];
+        if([[placeDic objectForKey:@"tag"] intValue] != i && toggleControl.selected == 1){
+            toggleControl.selected = 0;
+            toggleControl.imageView.image = toggleControl.normalImage;
+        }
+    }
+    PostInfoUtil *postInfo = [PostInfoUtil sharedCenter];
+    if([[placeDic objectForKey:@"selected"] intValue] == 1){
+        postInfo.place = [placeDic objectForKey:@"placeName"];
+    } else{
+        postInfo.place = @"";
+    }
+
+    
 }
 
 

@@ -11,6 +11,7 @@
 
 #import "SongToggleControl.h"
 #import "ImageUtil.h"
+#import "PostInfoUtil.h"
 
 #import "PrettyKit.h"
 
@@ -87,10 +88,10 @@
     
     songList = [NSMutableArray array];
     
-    NSMutableArray* songList_OK = [NSMutableArray arrayWithArray:[_liveReportObj getSongList:@"岡平健治"]];
-    NSMutableArray* songList_3B = [NSMutableArray arrayWithArray:[_liveReportObj getSongList:@"3B LAB.☆S"]];
-    NSMutableArray* songList_19 = [NSMutableArray arrayWithArray:[_liveReportObj getSongList:@"19"]];
-    NSMutableArray* songList_SF = [NSMutableArray arrayWithArray:[_liveReportObj getSongList:@"少年フレンド"]];
+    NSMutableArray* songList_OK = [NSMutableArray arrayWithArray:[_liveReportObj getSongListByArtist:@"岡平健治"]];
+    NSMutableArray* songList_3B = [NSMutableArray arrayWithArray:[_liveReportObj getSongListByArtist:@"3B LAB.☆S"]];
+    NSMutableArray* songList_19 = [NSMutableArray arrayWithArray:[_liveReportObj getSongListByArtist:@"19"]];
+    NSMutableArray* songList_SF = [NSMutableArray arrayWithArray:[_liveReportObj getSongListByArtist:@"少年フレンド"]];
     [songList addObject:songList_OK];
     [songList addObject:songList_3B];
     [songList addObject:songList_19];
@@ -109,6 +110,7 @@
                 toggleControl.tag = i;
                 toggleControl.section = j;
                 toggleControl.row = k;
+                toggleControl.songName = [[[[songList objectAtIndex:i] objectAtIndex:j] objectAtIndex:k] objectForKey:@"name"];
                 [toggleControlList_row addObject:toggleControl];
             }
             [toggleControlList_section addObject:toggleControlList_row];
@@ -252,17 +254,6 @@
     }
     return NULL;
 }
-
--(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section{
-    if(section == ([[songTableList objectAtIndex:tableView.tag] numberOfSections] -1)){
-        //Localize
-        NSString* tableFooter = NSLocalizedString(@"RockFordRecords Co., Ltd.", @"RockFordRecords Co., Ltd.");
-        return tableFooter;
-    }
-    return 0;
-}
-
-
 
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -467,8 +458,14 @@
 -(void)songTogglePushed:(NSNotification*) notification{
     
     NSDictionary *songDic = [[notification userInfo] objectForKey:@"Song"];
-    NSLog(@"in table view song = %@", [songDic description]);
-    
+    PostInfoUtil *postInfo = [PostInfoUtil sharedCenter];
+    NSUInteger index = [postInfo.songList indexOfObject:songDic];
+    if(index != NSNotFound){
+        [postInfo.songList removeObjectAtIndex:index];
+    }else{
+        [postInfo.songList addObject:songDic];
+
+    }
 }
 
 #pragma mark -
@@ -480,7 +477,22 @@
             
             break;
         case 1:
-            NSLog(@"reset setlist");
+            {
+                for(int i=0; i<[toggleControlList count]; i++){
+                    for(int j=0; j<[[toggleControlList objectAtIndex:i] count]; j++){
+                        for(int k=0; k<[[[toggleControlList objectAtIndex:i] objectAtIndex:j] count]; k++) {
+                            
+                            SongToggleControl *toggleControl = [[[toggleControlList objectAtIndex:i] objectAtIndex:j] objectAtIndex:k];
+                            toggleControl.selected = 0;
+                            toggleControl.imageView.image = toggleControl.normalImage;
+                        }
+                        
+                    }
+                }
+                PostInfoUtil *postInfo = [PostInfoUtil sharedCenter];
+                [postInfo.songList removeAllObjects];
+    
+            }
             break;
     }
     

@@ -12,7 +12,8 @@
     
 }
 
-@property(strong, nonatomic) NSDictionary* placeDic;
+@property(copy, nonatomic) NSString* place;
+@property(strong, nonatomic) NSMutableArray* songList;
 
 + (id)sharedCenter;
 @end

@@ -9,6 +9,8 @@
 #import "SocialViewController.h"
 
 #import <Social/Social.h>
+#import <Accounts/Accounts.h>
+#import "PostInfoUtil.h"
 
 #import "PrettyKit.h"
 
@@ -122,17 +124,6 @@
     return 0;
 }
 
--(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section{
-    if(section == ([_socialTable numberOfSections] -1)){
-        //Localize
-        NSString* tableFooter = NSLocalizedString(@"RockFordRecords Co., Ltd.", @"RockFordRecords Co., Ltd.");
-        return tableFooter;
-    }
-    return 0;
-}
-
-
-
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -187,19 +178,42 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     [_socialTable deselectRowAtIndexPath:[_socialTable indexPathForSelectedRow] animated:NO];
+    PostInfoUtil *postInfo = [PostInfoUtil sharedCenter];
     switch (indexPath.section) {
         case 0:{
-            SLComposeViewController *facebookPostViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
-            [facebookPostViewController setInitialText:@"facebook投稿テスト"];
-            //[facebookPostVC addImage:[UIImage imageNamed:@"EUI.jpg"]];
-            [self presentViewController:facebookPostViewController animated:YES completion:nil];
+            if([postInfo.place length] == 0 || [postInfo.songList count] == 0){
+                UIAlertView *alert =
+                [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Item Not Set", @"Item Not Set") message:NSLocalizedString(@"Items are not set.", @"Items are not set") delegate:self cancelButtonTitle:NSLocalizedString(@"No", @"No") otherButtonTitles:nil, nil];
+                [alert show];
+            } else{
+                SLComposeViewController *facebookPostViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+                NSString *postString = [self getFBPostString];
+                [facebookPostViewController setInitialText:postString];
+                //[facebookPostVC addImage:[UIImage imageNamed:@"EUI.jpg"]];
+                [self presentViewController:facebookPostViewController animated:YES completion:nil];
+            }
         }
             break;
             
         case 1:{
-            SLComposeViewController *twitterPostViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
-            [twitterPostViewController setInitialText:@"twitter投稿テスト"];
-            [self presentViewController:twitterPostViewController animated:YES completion:nil];
+            if([postInfo.place length] == 0 || [postInfo.songList count] == 0){
+                UIAlertView *alert =
+                [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Item Not Set", @"Item Not Set") message:NSLocalizedString(@"Items are not set.", @"Items are not set") delegate:self cancelButtonTitle:NSLocalizedString(@"No", @"No") otherButtonTitles:nil, nil];
+                [alert show];
+            } else{
+                SLComposeViewController *twitterPostViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+                NSArray *postStringArray = [self getTWPostStringArray];
+                if([postStringArray count] == 1){
+                    [twitterPostViewController setInitialText:[postStringArray objectAtIndex:0]];
+                    [self presentViewController:twitterPostViewController animated:YES completion:nil];
+                } else{
+                    UIAlertView *alert =
+                    [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Post to Twitter", @"Post to Twitter") message:NSLocalizedString(@"Post Multiple tweets to twitter because tweet is over 140 characters", @"Post Multiple tweets to twitter because tweet is over 140 characters") delegate:self cancelButtonTitle:NSLocalizedString(@"No", @"No") otherButtonTitles:NSLocalizedString(@"Yes", @"Yes"), nil];
+                    alert.tag = 1;
+                    [alert show];
+                }
+                
+            }
         }
             
             break;
@@ -237,6 +251,105 @@
         _socialTable.frame = CGRectMake(_socialTable.frame.origin.x, 0, _socialTable.frame.size.width, self.view.frame.size.height);
     }
 }
+
+#pragma mark -
+#pragma mark UIAlertView Delegate Methods
+-(void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if(alertView.tag == 1){
+        switch (buttonIndex) {
+            case 0:
+                break;
+            case 1:
+            {
+                NSArray *postStringArray = [self getTWPostStringArray];
+                
+                if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
+                    ACAccountStore *accountStore = [[ACAccountStore alloc] init];
+                    ACAccountType *accountType = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
+                    [accountStore
+                     requestAccessToAccountsWithType:accountType
+                     options:nil
+                     completion:^(BOOL granted, NSError *error) {
+                         if (granted) {
+                             for(int i=0; i<[postStringArray count]; i++){
+                                 NSArray *accountArray = [accountStore accountsWithAccountType:accountType];
+                                 if (accountArray.count > 0) {
+                                     NSURL *url = [NSURL URLWithString:@"http://api.twitter.com/1/statuses/update.json"];
+                                     NSDictionary *params = [NSDictionary dictionaryWithObject:[postStringArray objectAtIndex:i] forKey:@"status"];
+                                     
+                                     SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter
+                                                                             requestMethod:SLRequestMethodPOST
+                                                                                       URL:url
+                                                                                parameters:params];
+                                     [request setAccount:[accountArray objectAtIndex:0]];
+                                     [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+                                         NSLog(@"responseData=%@", [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
+                                     }];
+                                 }
+                             }
+                         } else{
+                             UIAlertView *alert =
+                             [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Account is not set", @"Account is not set") message:NSLocalizedString(@"Can't post to twitter.", @"Can't post to twitter.") delegate:self cancelButtonTitle:NSLocalizedString(@"No", @"No") otherButtonTitles:nil, nil];
+                             [alert show];
+                         }
+                     }];
+                }
+                
+            }
+                break;
+        }
+    }
+    
+}
+
+
+#pragma mark -
+#pragma mark StringFormat Method
+-(NSString*) getFBPostString{
+    PostInfoUtil *postInfo = [PostInfoUtil sharedCenter];
+    
+    NSString *placeString =postInfo.place;
+    NSMutableString *songString = [NSMutableString string];
+    for(int i=0; i<[postInfo.songList count]; i++){
+        [songString appendString:[[postInfo.songList objectAtIndex:i] objectForKey:@"songName"]];
+        [songString appendString:@"/"];
+    }
+    
+    NSString *postString = [NSString stringWithFormat:@"【岡平健治ソロ28都道府県弾語り自走ツアー】【会場】 %@ 【セットリスト】 %@  #岡平健治 %@", placeString, songString, APPLICATION_LINK];
+    
+    return postString;
+}
+
+-(NSMutableArray*) getTWPostStringArray{
+    PostInfoUtil *postInfo = [PostInfoUtil sharedCenter];
+    
+    NSString *placeString =postInfo.place;
+    NSMutableString *songString = [NSMutableString string];
+    for(int i=0; i<[postInfo.songList count]; i++){
+        [songString appendString:[[postInfo.songList objectAtIndex:i] objectForKey:@"songName"]];
+        [songString appendString:@"/"];
+    }
+    
+    NSMutableString *postString = [NSMutableString stringWithFormat:@"【岡平健治ソロ28都道府県弾語り自走ツアー】【会場】 %@ 【セットリスト】 %@", placeString, songString];
+    NSMutableArray *postStringArray = [NSMutableArray array];
+    
+    if([postString length] > 100){
+        while([postString length] > 100){
+            NSString *formatString = [NSString stringWithFormat:@"%@ #岡平健治 %@",[postString substringToIndex:100], APPLICATION_LINK];
+            [postString deleteCharactersInRange:NSMakeRange(0, 99)];
+            [postStringArray addObject:formatString];
+        }
+        [postString appendString:@" #岡平健治 "];
+        [postString appendString:APPLICATION_LINK];
+        [postStringArray addObject:postString];
+    } else{
+        [postString appendString:@" #岡平健治 "];
+        [postString appendString:APPLICATION_LINK];
+        [postStringArray addObject:postString];
+    }
+    return postStringArray;
+}
+
 
 
 @end

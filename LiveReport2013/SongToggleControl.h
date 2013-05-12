@@ -12,6 +12,7 @@
 
 @property(assign) int section;
 @property(assign) int row;
+@property(copy, nonatomic) NSString *songName;
 
 - (void) togglePushed;
 

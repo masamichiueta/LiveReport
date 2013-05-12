@@ -12,6 +12,7 @@
 @synthesize normalImage=_normalImage;
 @synthesize selectedImage=_selectedImage;
 @synthesize imageView=_imageView;
+@synthesize selected=_selected;
 
 
 - (id)initWithFrame:(CGRect)frame
@@ -32,8 +33,8 @@
 }
 
 - (void) togglePushed{
-    selected = !selected;
-    _imageView.image = (selected ? _selectedImage : _normalImage);
+    _selected = !_selected;
+    _imageView.image = (_selected ? _selectedImage : _normalImage);
 }
 
 /*

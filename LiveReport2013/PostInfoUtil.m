@@ -9,11 +9,22 @@
 #import "PostInfoUtil.h"
 
 @implementation PostInfoUtil
-@synthesize placeDic=_placeDic;
+@synthesize place=_place;
+@synthesize songList=_songList;
 
 //Singleton
 
 static PostInfoUtil* sharedInstance = nil;
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _songList = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
+
 
 + (id)allocWithZone:(NSZone *)zone {
 	@synchronized(self) {

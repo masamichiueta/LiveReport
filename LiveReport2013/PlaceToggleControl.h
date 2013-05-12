@@ -10,5 +10,6 @@
 
 @interface PlaceToggleControl : ToggleImageControl
 
+@property(copy, nonatomic) NSString* placeName;
 - (void) togglePushed;
 @end

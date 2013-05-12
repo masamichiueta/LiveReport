@@ -38,6 +38,7 @@
 		6703138616FF47FF0023462C /* PlaceToggleControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 6703138516FF47FF0023462C /* PlaceToggleControl.m */; };
 		6703138916FF48AA0023462C /* SongToggleControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 6703138816FF48AA0023462C /* SongToggleControl.m */; };
 		6768B06617085B9C00FD2A8F /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6768B06517085B9C00FD2A8F /* iAd.framework */; };
+		67755E85173F559100A25B03 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67755E84173F559100A25B03 /* Accounts.framework */; };
 		677C90901703A2DE003E549D /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 677C908F1703A2DE003E549D /* UIImage+Resize.m */; };
 		677C90931703A912003E549D /* SocialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 677C90921703A912003E549D /* SocialViewController.m */; };
 		677C90961703A934003E549D /* PostListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 677C90951703A934003E549D /* PostListViewController.m */; };
@@ -190,6 +191,7 @@
 		6703138716FF48AA0023462C /* SongToggleControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongToggleControl.h; sourceTree = "<group>"; };
 		6703138816FF48AA0023462C /* SongToggleControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongToggleControl.m; sourceTree = "<group>"; };
 		6768B06517085B9C00FD2A8F /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		67755E84173F559100A25B03 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		677C908E1703A2DE003E549D /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
 		677C908F1703A2DE003E549D /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
 		677C90911703A912003E549D /* SocialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialViewController.h; sourceTree = "<group>"; };
@@ -304,6 +306,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67755E85173F559100A25B03 /* Accounts.framework in Frameworks */,
 				6768B06617085B9C00FD2A8F /* iAd.framework in Frameworks */,
 				677C90EB1703E8E2003E549D /* Social.framework in Frameworks */,
 				679044B716F9CDFC002D29FA /* QuartzCore.framework in Frameworks */,
@@ -591,6 +594,7 @@
 		67DC1E4516F8A27700D73D1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				67755E84173F559100A25B03 /* Accounts.framework */,
 				6768B06517085B9C00FD2A8F /* iAd.framework */,
 				677C90EA1703E8E2003E549D /* Social.framework */,
 				679044B616F9CDFC002D29FA /* QuartzCore.framework */,
@@ -1007,6 +1011,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "1BD0058F-7A60-4A5C-BE6F-6CDFEAADEE6F";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1BD0058F-7A60-4A5C-BE6F-6CDFEAADEE6F";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1026,6 +1031,7 @@
 				OTHER_LDFLAGS = "-lsqlite3.0";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "1BD0058F-7A60-4A5C-BE6F-6CDFEAADEE6F";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

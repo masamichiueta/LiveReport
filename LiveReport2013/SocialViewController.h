@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "iAd/iAd.h"
 
-@interface SocialViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, ADBannerViewDelegate>{
+@interface SocialViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, ADBannerViewDelegate, UIAlertViewDelegate>{
     
     ADBannerView *adBannerView;
     BOOL bannerIsVisible;

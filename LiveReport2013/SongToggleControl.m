@@ -9,6 +9,7 @@
 #import "SongToggleControl.h"
 
 @implementation SongToggleControl
+@synthesize songName=_songName;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -22,7 +23,7 @@
 
 - (void) togglePushed{
     [super togglePushed];
-    NSDictionary *songInfo = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:self.tag], @"table", [NSNumber numberWithInt:self.section], @"section", [NSNumber numberWithInt:self.row], @"row", nil];
+    NSDictionary *songInfo = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:self.tag], @"table", [NSNumber numberWithInt:self.section], @"section", [NSNumber numberWithInt:self.row], @"row", _songName,@"songName", nil];
     NSDictionary *sendDict = [NSDictionary dictionaryWithObject: songInfo forKey: @"Song"];
     [[NSNotificationCenter defaultCenter] postNotificationName: @"SongTogglePushed" object: self userInfo: sendDict];
 }

@@ -9,9 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface ToggleImageControl : UIControl
-{
-    BOOL selected;
-}
 
 @property(strong, nonatomic) UIImageView *imageView;
 @property(strong, nonatomic) UIImage *normalImage;

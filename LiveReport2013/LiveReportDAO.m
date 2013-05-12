@@ -63,6 +63,7 @@
 
 }
 
+
 -(NSMutableArray *)getSongList{
     [self connect];
     NSMutableArray *songList = [NSMutableArray array];
@@ -94,7 +95,7 @@
     
 }
 
--(NSMutableArray *)getSongList:(NSString *) artist{
+-(NSMutableArray *)getSongListByArtist:(NSString *) artist{
     [self connect];
     NSMutableArray *songList = [NSMutableArray array];
     if ([_db open]) {
