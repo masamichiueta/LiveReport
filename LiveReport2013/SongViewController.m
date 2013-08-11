@@ -437,6 +437,8 @@
     currentTag = tableView.tag;
     if(currentTag == 0){
         currentSection = indexPath.section - 1;
+    } else{
+        currentSection = indexPath.section;
     }
     currentRow = indexPath.row;
     [self performSegueWithIdentifier:@"itunesLink" sender:self];

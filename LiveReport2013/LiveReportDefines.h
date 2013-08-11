@@ -20,7 +20,7 @@
 
 #define TWITTER_SEARCH @"http://search.twitter.com/search.json?q=%23%e5%b2%a1%e5%b9%b3%e5%81%a5%e6%b2%bb%0d%0a&rpp=100" //serach 岡平健治 by utf-8
 
-#define APPLICATION_LINK @"http://www.test.com"
+#define APPLICATION_LINK @"https://itunes.apple.com/us/app/livereport2013/id647672165?ls=1&mt=8"
 
 #define ROCKFORDRECORDS_URL @"http://www.rockfordrecords.com/"
 #define DEVELOPER_URL @"http://www.uetamasamichi.com/"

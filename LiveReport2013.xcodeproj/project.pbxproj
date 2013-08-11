@@ -227,6 +227,7 @@
 		67755EBD173F751200A25B03 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		67755EC1173F767900A25B03 /* en */ = {isa = PBXFileReference; lastKnownFileType = file; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		67755EC3173F768100A25B03 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		67755EC7173F836600A25B03 /* LiveReport2013.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = LiveReport2013.entitlements; sourceTree = "<group>"; };
 		677C908E1703A2DE003E549D /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
 		677C908F1703A2DE003E549D /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
 		677C90911703A912003E549D /* SocialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialViewController.h; sourceTree = "<group>"; };
@@ -660,6 +661,7 @@
 		67DC1E4C16F8A27800D73D1E /* LiveReport2013 */ = {
 			isa = PBXGroup;
 			children = (
+				67755EC7173F836600A25B03 /* LiveReport2013.entitlements */,
 				6782427417042C9900482B88 /* ImageStore */,
 				677C90F81703F757003E549D /* EGOTableViewPullRefresh */,
 				6703136216FEF6390023462C /* FMDB */,
@@ -1037,7 +1039,7 @@
 		67755EC5173F7B8300A25B03 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Masamichi Ueta (2WDDC954GM)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Masamichi Ueta";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../Documents/FacebookSDK\"",
@@ -1048,7 +1050,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_LDFLAGS = "-lsqlite3.0";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1BD0058F-7A60-4A5C-BE6F-6CDFEAADEE6F";
+				PROVISIONING_PROFILE = "7C80A0A8-A28F-4082-8400-8CCD101237C8";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

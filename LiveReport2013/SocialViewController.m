@@ -190,7 +190,7 @@
                 SLComposeViewController *facebookPostViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
                 NSString *postString = [self getFBPostString];
                 [facebookPostViewController setInitialText:postString];
-                //[facebookPostVC addImage:[UIImage imageNamed:@"EUI.jpg"]];
+                [facebookPostViewController addImage:[UIImage imageNamed:@"icon@2x.png"]];
                 [self presentViewController:facebookPostViewController animated:YES completion:nil];
             }
         }
