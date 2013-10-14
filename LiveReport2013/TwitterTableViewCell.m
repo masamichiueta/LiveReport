@@ -30,7 +30,7 @@
     if (self) {
         _userNameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _userNameLabel.backgroundColor = [UIColor clearColor];
-        _userNameLabel.font = [UIFont boldSystemFontOfSize:10.0f];
+        _userNameLabel.font = [UIFont systemFontOfSize:10.0f];
         [self.contentView addSubview:_userNameLabel];
         
         _statusLabel = [[UILabel alloc] initWithFrame:CGRectZero];

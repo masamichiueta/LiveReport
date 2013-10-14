@@ -11,6 +11,7 @@
 #import "PlaceToggleControl.h"
 #import "ImageUtil.h"
 #import "PostInfoUtil.h"
+#import "UIDevice+VersionCheck_h.h"
 
 #import "PrettyKit.h"
 
@@ -45,30 +46,21 @@
 
 
 #pragma mark -
-#pragma mark Pretty Kit
-- (void) customizeNavBar {
-    PrettyNavigationBar *navBar = (PrettyNavigationBar *)self.navigationController.navigationBar;
-    
-    navBar.topLineColor = [UIColor darkGrayColor];
-    navBar.gradientStartColor = [UIColor darkGrayColor];
-    navBar.gradientEndColor = [UIColor colorWithHex:0x000000];
-    navBar.bottomLineColor = [UIColor colorWithHex:0xCC3599];
-    navBar.shadowOpacity = 0.0;
-    //navBar.tintColor = navBar.gradientEndColor;
-    navBar.roundedCornerRadius = 10;
-    self.navigationItem.title = NSLocalizedString(@"Place List", @"Place List");
-    
-}
-
-#pragma mark -
 #pragma mark Initialization
+-(void) initNavBar{
+    if([[UIDevice currentDevice] systemMajorVersion] < 7)
+    {
+        self.navigationController.navigationBar.tintColor = [UIColor colorWithHex:0xCC3599];
+    }
+    self.navigationItem.title = NSLocalizedString(@"Place List", @"Place List");
+}
 - (void) initTableView{
     _placeListTable.delegate = self;
     _placeListTable.dataSource = self;
     _placeListTable.scrollsToTop = YES;
     
-    [_placeListTable dropShadows];
-    _placeListTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
+    //[_placeListTable dropShadows];
+    //_placeListTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
 }
 
 -(void) initToggleControl{
@@ -97,12 +89,20 @@
 
 #pragma mark -
 #pragma mark View Life Cycle
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if([self respondsToSelector:@selector(edgesForExtendedLayout)])
+        [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    
-    [self customizeNavBar];
+
+    [self initNavBar];
     [self initTableView];
     
     _liveReportObj = [[LiveReportDAO alloc] init];
@@ -153,25 +153,31 @@
     static NSString *CellIdentifier = @"Cell";
     
     PrettyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        cell.tableViewBackgroundColor = tableView.backgroundColor;
-    }
+    cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    cell.tableViewBackgroundColor = tableView.backgroundColor;
     
     //PrettyKitSetting
+    if([[UIDevice currentDevice] systemMajorVersion] < 7)
+    {
+        cell.cornerRadius = 5;
+        cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
+        cell.borderColor = [UIColor colorWithHex:0xCC3599];
+        [cell prepareForTableView:tableView indexPath:indexPath];
+    }
+    else {
+        cell.customSeparatorStyle = UITableViewCellSeparatorStyleNone;
+    }
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.numberOfLines = 2;
     cell.textLabel.minimumScaleFactor = 10;
-    cell.textLabel.font = [UIFont boldSystemFontOfSize:10];
-    cell.cornerRadius = 5;
-    cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
-    cell.borderColor = [UIColor colorWithHex:0xCC3599];
-    [cell prepareForTableView:tableView indexPath:indexPath];
+    cell.textLabel.font = [UIFont systemFontOfSize:10];
+    
     
     //Cell Content
     cell.textLabel.text = [[placeList objectAtIndex:indexPath.row] objectForKey:@"name"];
     cell.detailTextLabel.text = [[placeList objectAtIndex:indexPath.row] objectForKey:@"date"];
-        
+    
+    
     
     //Check Mark
     cell.imageView.image = [ImageUtil imageWithColor:[UIColor clearColor]];

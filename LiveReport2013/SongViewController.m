@@ -12,6 +12,7 @@
 #import "SongToggleControl.h"
 #import "ImageUtil.h"
 #import "PostInfoUtil.h"
+#import "UIDevice+VersionCheck_h.h"
 
 #import "PrettyKit.h"
 
@@ -65,20 +66,6 @@
     return YES;
 }
 
-#pragma mark -
-#pragma mark Pretty Kit
-- (void) customizeNavBar {
-    PrettyNavigationBar *navBar = (PrettyNavigationBar *)self.navigationController.navigationBar;
-    
-    navBar.topLineColor = [UIColor darkGrayColor];
-    navBar.gradientStartColor = [UIColor darkGrayColor];
-    navBar.gradientEndColor = [UIColor colorWithHex:0x000000];
-    navBar.bottomLineColor = [UIColor colorWithHex:0xCC3599];
-    navBar.shadowOpacity = 0.0;
-    _artistSelectionSegmentedController.tintColor = [UIColor darkGrayColor];
-    navBar.roundedCornerRadius = 10;
-    
-}
 
 #pragma mark -
 #pragma mark Initialization
@@ -124,7 +111,7 @@
 
 - (void) initScrollView{
     _scrollView.delegate = self;
-    _scrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
+    //_scrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
     _scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width*ARTIST_NUM, _scrollView.frame.size.height);
 }
 
@@ -139,9 +126,10 @@
         songTable.delegate = self;
         songTable.dataSource = self;
         songTable.tag = i;
-        [songTable dropShadows];
+        //[songTable dropShadows];
         songTable.backgroundView = nil;
-        songTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
+        songTable.backgroundColor = [UIColor whiteColor];
+        //songTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
         [songTableList addObject:songTable];
         [_scrollView addSubview:songTable];
     }
@@ -159,10 +147,25 @@
 
 #pragma mark -
 #pragma mark View Life Cycle
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if([self respondsToSelector:@selector(edgesForExtendedLayout)])
+        [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self customizeNavBar];
+    if([[UIDevice currentDevice] systemMajorVersion] < 7)
+    {
+        self.artistSelectionSegmentedController.tintColor = [UIColor colorWithHex:0xCC3599];
+        if([[UIDevice currentDevice] systemMajorVersion] < 7)
+        {
+            self.navigationController.navigationBar.tintColor = [UIColor colorWithHex:0xCC3599];
+        }
+    }
     [self initSongList];
     [self initToggleControl];
     [self initIAd];
@@ -295,50 +298,74 @@
     
     if(tableView.tag == 0 && indexPath.section == 0){
         static NSString *CellIdentifier = @"ResetCell";
+        
         PrettyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-            cell.tableViewBackgroundColor = tableView.backgroundColor;
-        }
+        
+        cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell.tableViewBackgroundColor = tableView.backgroundColor;
+        
         //PrettyKitSetting
+        if([[UIDevice currentDevice] systemMajorVersion] < 7)
+        {
+            cell.cornerRadius = 5;
+            cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
+            cell.borderColor = [UIColor colorWithHex:0xCC3599];
+            [cell prepareForTableView:tableView indexPath:indexPath];
+        }
+        else{
+            cell.customSeparatorStyle = UITableViewCellSeparatorStyleNone;
+        }
+       
         cell.textLabel.adjustsFontSizeToFitWidth = YES;
         cell.textLabel.numberOfLines = 2;
         cell.textLabel.minimumScaleFactor = 10;
-        cell.textLabel.font = [UIFont boldSystemFontOfSize:10];
-        cell.cornerRadius = 5;
-        cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
-        cell.borderColor = [UIColor colorWithHex:0xCC3599];
-        [cell prepareForTableView:tableView indexPath:indexPath];
+        cell.textLabel.font = [UIFont systemFontOfSize:10];
+        
         cell.textLabel.text = NSLocalizedString(@"Reset SetList", @"Reset Set List");
+        
         return cell;
-    }
+        }
     else{
         static NSString *CellIdentifier = @"Cell";
-        
+
         PrettyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-            cell.tableViewBackgroundColor = tableView.backgroundColor;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            
-        }
+        
+        cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell.tableViewBackgroundColor = tableView.backgroundColor;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
         
         //PrettyKitSetting
+        //PrettyKitSetting
+        if([[UIDevice currentDevice] systemMajorVersion] < 7)
+        {
+            cell.cornerRadius = 5;
+            cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
+            cell.borderColor = [UIColor colorWithHex:0xCC3599];
+            [cell prepareForTableView:tableView indexPath:indexPath];
+        }
+        else{
+            cell.customSeparatorStyle = UITableViewCellSeparatorStyleNone;
+        }
+        
         cell.textLabel.adjustsFontSizeToFitWidth = YES;
         cell.textLabel.numberOfLines = 2;
         cell.textLabel.minimumScaleFactor = 10;
-        cell.textLabel.font = [UIFont boldSystemFontOfSize:10];
-        cell.cornerRadius = 5;
-        cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
-        cell.borderColor = [UIColor colorWithHex:0xCC3599];
-        [cell prepareForTableView:tableView indexPath:indexPath];
+        cell.textLabel.font = [UIFont systemFontOfSize:10];
         
-    
-        //Cell Accessory 
+        //Cell Accessory
         UIButton *myAccessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
         [myAccessoryButton setBackgroundColor:[UIColor clearColor]];
-        [myAccessoryButton setImage:[UIImage imageNamed:@"custom_accessory"] forState:UIControlStateNormal];
-        [myAccessoryButton setImage:[UIImage imageNamed:@"custom_accessory_touched"] forState:UIControlStateHighlighted];
+        if([[UIDevice currentDevice] systemMajorVersion] < 7)
+        {
+            [myAccessoryButton setImage:[UIImage imageNamed:@"custom_accessory"] forState:UIControlStateNormal];
+            [myAccessoryButton setImage:[UIImage imageNamed:@"custom_accessory_touched"] forState:UIControlStateHighlighted];
+        }
+        else
+        {
+            [myAccessoryButton setImage:[UIImage imageNamed:@"custom_accessory_outline"] forState:UIControlStateNormal];
+            [myAccessoryButton setImage:[UIImage imageNamed:@"custom_accessory_outline"] forState:UIControlStateHighlighted];
+        }
         [myAccessoryButton addTarget:self action:@selector(myAccessoryTouched:event:)forControlEvents:UIControlEventTouchUpInside];
         [cell setAccessoryView:myAccessoryButton];
         

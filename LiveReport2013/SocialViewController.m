@@ -11,6 +11,7 @@
 #import <Social/Social.h>
 #import <Accounts/Accounts.h>
 #import "PostInfoUtil.h"
+#import "UIDevice+VersionCheck_h.h"
 
 #import "PrettyKit.h"
 
@@ -42,28 +43,21 @@
 }
 
 #pragma mark -
-#pragma mark Pretty Kit
-- (void) customizeNavBar {
-    PrettyNavigationBar *navBar = (PrettyNavigationBar *)self.navigationController.navigationBar;
-    
-    navBar.topLineColor = [UIColor darkGrayColor];
-    navBar.gradientStartColor = [UIColor darkGrayColor];
-    navBar.gradientEndColor = [UIColor colorWithHex:0x000000];
-    navBar.bottomLineColor = [UIColor colorWithHex:0xCC3599];
-    navBar.shadowOpacity = 0.0;
-    navBar.roundedCornerRadius = 10;
-    self.navigationItem.title = NSLocalizedString(@"Post to SNS", @"Post to SNS");
-    
-}
-
-#pragma mark -
 #pragma mark Initialization
+
+- (void) initNavBar{
+    if([[UIDevice currentDevice] systemMajorVersion] < 7)
+    {
+        self.navigationController.navigationBar.tintColor = [UIColor colorWithHex:0xCC3599];
+    }
+    self.navigationItem.title = NSLocalizedString(@"Post to SNS", @"Post to SNS");
+}
 - (void) initTableView{
     _socialTable.delegate = self;
     _socialTable.dataSource = self;
     _socialTable.scrollsToTop = YES;
-    [_socialTable dropShadows];
-    _socialTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
+    //[_socialTable dropShadows];
+    //_socialTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
 }
 
 -(void) initIAd{
@@ -79,11 +73,19 @@
 
 #pragma mark -
 #pragma mark View Life Cycle
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if([self respondsToSelector:@selector(edgesForExtendedLayout)])
+        [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    [self customizeNavBar];
+    [self initNavBar];
     [self initTableView];
     [self initIAd];
 }
@@ -140,28 +142,32 @@
     static NSString *CellIdentifier = @"Cell";
     
     PrettyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        cell.tableViewBackgroundColor = tableView.backgroundColor;
-    }
-    
+    cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    cell.tableViewBackgroundColor = tableView.backgroundColor;
+
     //PrettyKitSetting
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.numberOfLines = 2;
     cell.textLabel.minimumScaleFactor = 10;
-    cell.textLabel.font = [UIFont boldSystemFontOfSize:10];
-    cell.cornerRadius = 5;
-    cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
-    cell.borderColor = [UIColor colorWithHex:0xCC3599];
-    [cell prepareForTableView:tableView indexPath:indexPath];
+    cell.textLabel.font = [UIFont systemFontOfSize:10];
     
+    if([[UIDevice currentDevice] systemMajorVersion] < 7)
+    {
+        cell.cornerRadius = 5;
+        cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
+        cell.borderColor = [UIColor colorWithHex:0xCC3599];
+        [cell prepareForTableView:tableView indexPath:indexPath];
+    }
+    else{
+        cell.customSeparatorStyle = UITableViewCellSeparatorStyleNone;
+    }
     //Cell Content
     switch (indexPath.section) {
         case 0:
             cell.textLabel.text = NSLocalizedString(@"Post to Facebook", @"Post to Facebook");
-            cell.imageView.image = [UIImage imageNamed:@"facebook"];
+            cell.imageView.image = [UIImage imageNamed:@"flogo"];
             break;
-        
+            
         case 1:
             cell.textLabel.text = NSLocalizedString(@"Post to Twitter", @"Post to Twitter");
             cell.imageView.image = [UIImage imageNamed:@"twitter"];
@@ -173,8 +179,7 @@
     
     
     return cell;
-    
-}
+ }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     

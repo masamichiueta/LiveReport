@@ -8,14 +8,21 @@
 
 #import "AppDelegate.h"
 
-#import "PrettyKit.h"
+#import "UIDevice+VersionCheck_h.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    [self customizeTabBar];
+    if([[UIDevice currentDevice] systemMajorVersion] < 7)
+    {
+        
+    }
+    else
+    {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    }
     
     return YES;
 }
@@ -47,15 +54,7 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-#pragma mark -
-#pragma mark Pretty Kit
-- (void) customizeTabBar {
-    
-    UITabBarController *tabController = (UITabBarController *)self.window.rootViewController;
-    PrettyTabBar *tabBar = (PrettyTabBar *)tabController.tabBar;
-    tabBar.separatorLineColor = [UIColor colorWithHex:0xCC3599];
-    
-}
+
 
 
 @end

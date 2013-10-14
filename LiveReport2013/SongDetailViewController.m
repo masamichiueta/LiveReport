@@ -9,6 +9,7 @@
 #import "SongDetailViewController.h"
 
 #import "UIImage+Resize.h"
+#import "UIDevice+VersionCheck_h.h"
 
 #import "PrettyKit.h"
 
@@ -50,8 +51,8 @@
     _songDetailTable.delegate = self;
     _songDetailTable.dataSource = self;
     _songDetailTable.scrollsToTop = YES;
-    [_songDetailTable dropShadows];
-    _songDetailTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
+    //[_songDetailTable dropShadows];
+    //_songDetailTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
 }
 
 -(void) initIAd{
@@ -63,12 +64,20 @@
 }
 
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if([self respondsToSelector:@selector(edgesForExtendedLayout)])
+        [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+}
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     self.navigationItem.title = _songName;
-    self.navigationController.navigationBar.tintColor = [UIColor darkGrayColor];
     [self initTableView];
     [self initIAd];
     
@@ -130,22 +139,27 @@
     
     static NSString *CellIdentifier = @"Cell";
     
+    
     PrettyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        cell.tableViewBackgroundColor = tableView.backgroundColor;
-    }
+    cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    cell.tableViewBackgroundColor = tableView.backgroundColor;
     
     //PrettyKitSetting
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.numberOfLines = 2;
     cell.textLabel.minimumScaleFactor = 10;
-    cell.textLabel.font = [UIFont boldSystemFontOfSize:10];
-    cell.cornerRadius = 5;
-    cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
-    cell.borderColor = [UIColor colorWithHex:0xCC3599];
-    [cell prepareForTableView:tableView indexPath:indexPath];
+    cell.textLabel.font = [UIFont systemFontOfSize:10];
     
+    if([[UIDevice currentDevice] systemMajorVersion] < 7)
+    {
+        cell.cornerRadius = 5;
+        cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
+        cell.borderColor = [UIColor colorWithHex:0xCC3599];
+        [cell prepareForTableView:tableView indexPath:indexPath];
+    }
+    else{
+        cell.customSeparatorStyle = UITableViewCellSeparatorStyleNone;
+    }
     //Cell Content
     switch (indexPath.section) {
         case 0:{
@@ -167,7 +181,6 @@
     }
     
     return cell;
-    
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

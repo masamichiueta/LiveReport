@@ -10,9 +10,12 @@
 
 #import "TweetData.h"
 #import "TwitterTableViewCell.h"
+#import "UIDevice+VersionCheck_h.h"
 
 #import "PrettyKit.h"
 #import <QuartzCore/QuartzCore.h>
+#import <Social/Social.h>
+#import <Accounts/Accounts.h>
 
 @interface PostListViewController ()
 
@@ -43,28 +46,21 @@
 
 
 #pragma mark -
-#pragma mark Pretty Kit
-- (void) customizeNavBar {
-    PrettyNavigationBar *navBar = (PrettyNavigationBar *)self.navigationController.navigationBar;
-    
-    navBar.topLineColor = [UIColor darkGrayColor];
-    navBar.gradientStartColor = [UIColor darkGrayColor];
-    navBar.gradientEndColor = [UIColor colorWithHex:0x000000];
-    navBar.bottomLineColor = [UIColor colorWithHex:0xCC3599];
-    navBar.shadowOpacity = 0.0;
-    navBar.roundedCornerRadius = 10;
+#pragma mark Initialization
+- (void) initNavBar{
+    if([[UIDevice currentDevice] systemMajorVersion] < 7)
+    {
+        self.navigationController.navigationBar.tintColor = [UIColor colorWithHex:0xCC3599];
+    }
     self.navigationItem.title = NSLocalizedString(@"Tweet of everyone", @"Tweet of everyone");
-    
 }
 
-#pragma mark -
-#pragma mark Initialization
 - (void) initTableView{
     _postListTable.delegate = self;
     _postListTable.dataSource = self;
     _postListTable.scrollsToTop = YES;
-    [_postListTable dropShadows];
-    _postListTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
+    //[_postListTable dropShadows];
+    //_postListTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
 }
 
 - (void) initEGORefreshTableHeaderView{
@@ -72,6 +68,7 @@
 		
 		EGORefreshTableHeaderView *view = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - _postListTable.bounds.size.height, _postListTable.frame.size.width, _postListTable.bounds.size.height)];
 		view.delegate = self;
+        view.backgroundColor = [UIColor whiteColor];
 		[_postListTable addSubview:view];
 		refreshHeaderView = view;
 		
@@ -93,11 +90,18 @@
 
 #pragma mark -
 #pragma mark View Life Cycle
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if([self respondsToSelector:@selector(edgesForExtendedLayout)])
+        [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    [self customizeNavBar];
+    [self initNavBar];
     [self initTableView];
     [self initEGORefreshTableHeaderView];
     [self initIAd];
@@ -105,7 +109,24 @@
     tweetList = [NSMutableArray array];
     imageStore = [[ImageStore alloc] initWithDelegate:self];
     
-    [self getTweets];
+    
+    ACAccountStore *accountStore = [[ACAccountStore alloc]init];
+	ACAccountType *accountType = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
+	
+	[accountStore requestAccessToAccountsWithType:accountType options:nil completion:^(BOOL granted, NSError *error) {
+		if(granted)
+		{
+			NSArray *accounts = [accountStore accountsWithAccountType:accountType];
+			if([accounts count] > 0)
+			{
+				ACAccount *account = accounts[0];
+				self.accountId = [NSString stringWithString:account.identifier];
+                [self getTweets];
+			}
+		}
+	}];
+    
+    
     
 }
 
@@ -163,11 +184,15 @@
         cell.tableViewBackgroundColor = tableView.backgroundColor;
     }
     
-    cell.cornerRadius = 5;
-    cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
-    cell.borderColor = [UIColor colorWithHex:0xCC3599];
-    [cell prepareForTableView:tableView indexPath:indexPath];
-    
+    if([[UIDevice currentDevice] systemMajorVersion] < 7){
+        cell.cornerRadius = 5;
+        cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
+        cell.borderColor = [UIColor colorWithHex:0xCC3599];
+        [cell prepareForTableView:tableView indexPath:indexPath];
+    }
+    else{
+        cell.customSeparatorStyle = UITableViewCellSeparatorStyleNone;
+    }
     if([tweetList count] != 0){
         cell.textLabel.text = nil;
         [cell setupRowData:[tweetList objectAtIndex:indexPath.row]];
@@ -259,55 +284,57 @@
 
 
 - (void)getTweets{
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:TWITTER_SEARCH]];
-    NSURLConnection* connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    ACAccountStore *accountStore = [[ACAccountStore alloc]init];
+	ACAccount *account = [accountStore accountWithIdentifier:self.accountId];
+    NSString *requestString = @"https://api.twitter.com/1.1/search/tweets.json?q=#岡平健治&result_type=mixed&count=100";
+	NSURL *url = [NSURL URLWithString:[requestString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	
+	SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodGET URL:url parameters:nil];
+	[request setAccount:account];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    if(!connection){
-        NSLog(@"connectino error");
-    }
-}
-
-#pragma mark -
-#pragma mark NSURLConnection Delegate Method
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
-    NSLog(@"didReceiveResponse");
-    
-    tweetData = [[NSMutableData alloc] init];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
-    NSLog(@"didReceiveData");
-    
-    [tweetData appendData:data];
-    
-    
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
-    NSLog(@"didFailWithError");
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    if(reloading) [self doneLoadingTableViewData];
-
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection{
-    NSLog(@"connectionDidFinishLoading");
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [tweetList removeAllObjects];
-    
-    NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:tweetData options:0 error:nil];
-    
-    for(int i=0; i<[[jsonDictionary objectForKey:@"results"] count]; i++){
-        TweetData *rowData = [[TweetData alloc] init];
-        rowData.userName = [[[jsonDictionary objectForKey:@"results"] objectAtIndex:i] objectForKey:@"from_user"];
-        rowData.status = [[[jsonDictionary objectForKey:@"results"] objectAtIndex:i] objectForKey:@"text"];
-        rowData.createdAt = [[[jsonDictionary objectForKey:@"results"] objectAtIndex:i] objectForKey:@"created_at"];
-        rowData.iconImageURL = [[[jsonDictionary objectForKey:@"results"] objectAtIndex:i] objectForKey:@"profile_image_url"];
-        [tweetList addObject:rowData];
-    }
-    [_postListTable reloadData];
-    if(reloading) [self doneLoadingTableViewData];
+	
+	[request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+		if(responseData)
+		{
+			if(urlResponse.statusCode == 200)
+			{
+				[tweetList removeAllObjects];
+				NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
+                
+                for(int i=0; i<[[jsonDictionary objectForKey:@"statuses"] count]; i++){
+                    TweetData *rowData = [[TweetData alloc] init];
+                    rowData.userName = [[[jsonDictionary objectForKey:@"statuses"] objectAtIndex:i] objectForKey:@"from_user"];
+                    rowData.status = [[[jsonDictionary objectForKey:@"statuses"] objectAtIndex:i] objectForKey:@"text"];
+                    rowData.createdAt = [[[jsonDictionary objectForKey:@"statuses"] objectAtIndex:i] objectForKey:@"created_at"];
+                    rowData.iconImageURL = [[[[jsonDictionary objectForKey:@"statuses"] objectAtIndex:i] objectForKey:@"user"] objectForKey:@"profile_image_url"];
+                    
+                    [tweetList addObject:rowData];
+                }
+                [_postListTable
+                 performSelectorOnMainThread:@selector(reloadData)
+                 withObject:nil
+                 waitUntilDone:NO
+                 ];
+                if(reloading) [self doneLoadingTableViewData];
+                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+			}
+			else
+			{
+				// 認証エラー、レートリミットオーバーなど
+				NSLog(@"Error. %@",[[NSString alloc]initWithData:responseData encoding:NSUTF8StringEncoding]);
+                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                if(reloading) [self doneLoadingTableViewData];
+			}
+		}
+		else
+		{
+			// レスポンスを受け取れなかった場合
+            NSLog(@"Error");
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            if(reloading) [self doneLoadingTableViewData];
+			
+		}
+	}];
 }
 
 
@@ -316,7 +343,11 @@
 - (void)imageStoreDidGetNewImage:(ImageStore*)sender url:(NSString*)url
 {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [_postListTable reloadData];
+    [_postListTable
+     performSelectorOnMainThread:@selector(reloadData)
+     withObject:nil
+     waitUntilDone:NO
+     ];
     
 }
 

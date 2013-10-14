@@ -7,6 +7,7 @@
 //
 
 #import "ToggleImageControl.h"
+#import "UIDevice+VersionCheck_h.h"
 
 @implementation ToggleImageControl
 @synthesize normalImage=_normalImage;
@@ -20,9 +21,19 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        _normalImage = [UIImage imageNamed: @"normal.png"];
-        _selectedImage = [UIImage imageNamed: @"selected.png"];
-        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 15.0, 25.0, 25.0)];
+        if([[UIDevice currentDevice] systemMajorVersion] < 7)
+        {
+            _normalImage = [UIImage imageNamed: @"normal.png"];
+            _selectedImage = [UIImage imageNamed: @"selected.png"];
+        }
+        else
+        {
+            _normalImage = [UIImage imageNamed: @"normal_outline.png"];
+            _selectedImage = [UIImage imageNamed: @"selected_outline.png"];
+            
+        }
+        
+        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(15.0, 15.0, 25.0, 25.0)];
         _imageView.image = _normalImage;
         //_imageView = [[UIImageView alloc] initWithImage: _normalImage];
         [self addSubview:_imageView];

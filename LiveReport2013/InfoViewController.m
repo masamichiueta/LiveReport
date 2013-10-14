@@ -9,6 +9,7 @@
 #import "InfoViewController.h"
 
 #import "PrettyKit.h"
+#import "UIDevice+VersionCheck_h.h"
 
 @interface InfoViewController ()
 
@@ -37,30 +38,22 @@
     
 }
 
-
-#pragma mark -
-#pragma mark Pretty Kit
-- (void) customizeNavBar {
-    PrettyNavigationBar *navBar = (PrettyNavigationBar *)self.navigationController.navigationBar;
-    
-    navBar.topLineColor = [UIColor darkGrayColor];
-    navBar.gradientStartColor = [UIColor darkGrayColor];
-    navBar.gradientEndColor = [UIColor colorWithHex:0x000000];
-    navBar.bottomLineColor = [UIColor colorWithHex:0xCC3599];
-    navBar.shadowOpacity = 0.0;
-    navBar.roundedCornerRadius = 10;
-    self.navigationItem.title = NSLocalizedString(@"Information", @"Informtaion");
-    
-}
-
 #pragma mark -
 #pragma mark Initialization
+- (void) initNavBar{
+    if([[UIDevice currentDevice] systemMajorVersion] < 7)
+    {
+        self.navigationController.navigationBar.tintColor = [UIColor colorWithHex:0xCC3599];
+    }
+    self.navigationItem.title = NSLocalizedString(@"Information", @"Informtaion");
+}
+
 - (void) initTableView{
     _infoTable.delegate = self;
     _infoTable.dataSource = self;
     _infoTable.scrollsToTop = YES;
-    [_infoTable dropShadows];
-    _infoTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
+    //[_infoTable dropShadows];
+    //_infoTable.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
 }
 
 -(void) initIAd{
@@ -73,11 +66,19 @@
 
 #pragma mark -
 #pragma mark View Life Cycle
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if([self respondsToSelector:@selector(edgesForExtendedLayout)])
+        [self setEdgesForExtendedLayout:UIRectEdgeBottom];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    [self customizeNavBar];
+    [self initNavBar];
     [self initTableView];
     [self initIAd];
 }
@@ -133,21 +134,27 @@
     
     static NSString *CellIdentifier = @"Cell";
     
+ 
     PrettyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        cell.tableViewBackgroundColor = tableView.backgroundColor;
-    }
+    cell = [[PrettyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    cell.tableViewBackgroundColor = tableView.backgroundColor;
     
     //PrettyKitSetting
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.numberOfLines = 2;
     cell.textLabel.minimumScaleFactor = 10;
-    cell.textLabel.font = [UIFont boldSystemFontOfSize:10];
-    cell.cornerRadius = 5;
-    cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
-    cell.borderColor = [UIColor colorWithHex:0xCC3599];
-    [cell prepareForTableView:tableView indexPath:indexPath];
+    cell.textLabel.font = [UIFont systemFontOfSize:10];
+    
+    if([[UIDevice currentDevice] systemMajorVersion] < 7)
+    {
+        cell.cornerRadius = 5;
+        cell.customSeparatorColor = [UIColor colorWithHex:0xCC3599];
+        cell.borderColor = [UIColor colorWithHex:0xCC3599];
+        [cell prepareForTableView:tableView indexPath:indexPath];
+    }
+    else{
+        cell.customSeparatorStyle = UITableViewCellSeparatorStyleNone;
+    }
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     //Cell Content
@@ -166,7 +173,7 @@
     
     return cell;
     
-}
+ }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     switch (indexPath.section) {

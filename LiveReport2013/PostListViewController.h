@@ -17,7 +17,7 @@
     EGORefreshTableHeaderView *refreshHeaderView;
     BOOL reloading;
     NSMutableArray *tweetList;
-    NSMutableData* tweetData;
+    //NSMutableData* tweetData;
     ImageStore *imageStore;
     ADBannerView *adBannerView;
     BOOL bannerIsVisible;
@@ -25,6 +25,7 @@
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *postListTable;
+@property (strong, nonatomic) NSString *accountId;
 - (void)reloadTableViewDataSource;
 - (void)doneLoadingTableViewData;
 
